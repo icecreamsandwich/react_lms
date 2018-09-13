@@ -65,8 +65,8 @@ var ManagerEmployeeAll = React.createClass({
             this.clearStates();
         }.bind(this));
 
-        helpers.updateEmpTeam(this.state.emp_id, this.state.team).then(function(response) {
-        }.bind(this));
+       /* helpers.updateEmpTeam(this.state.emp_id, this.state.team).then(function(response) {
+        }.bind(this));*/
 
         Materialize.toast("Employee updated", 3000);
         this.clearForm();

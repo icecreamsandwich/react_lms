@@ -39,7 +39,14 @@ var helper = {
     });
   },
 
-  addEmployee: function(firstName, lastName, addressOne, addressTwo, city, state, zip, email, phone, phoneType) {
+  //Update the leave request (update approve to true/false)
+  approveLeave: function(leaveId) {
+    return axios.put('/updateLeaveRequest/' + leaveId, {
+      leaveId: leaveId
+    });
+  },
+
+  addEmployee: function(firstName, lastName, addressOne, addressTwo, city, state, zip, email, phone, phoneType, designation, team) {
     return axios.post("/addEmployee", {
         firstName: firstName,
         lastName: lastName,
@@ -50,7 +57,10 @@ var helper = {
         zip: zip,
         email: email,
         phone: phone,
-        phoneType: phoneType });
+        phoneType: phoneType,
+        designation: designation,
+        team: team 
+      });
   },
 
   //Add leave request
@@ -73,7 +83,7 @@ var helper = {
   },
 
 
-  updateEmployee: function(id, firstName, lastName, addressOne, addressTwo, city, state, zip, email, phone, phoneType) {
+  updateEmployee: function(id, firstName, lastName, addressOne, addressTwo, city, state, zip, email, phone, phoneType, designation, team) {
        return axios.put("/updateEmployee/" + id, {
            firstName: firstName,
            lastName: lastName,
@@ -84,7 +94,9 @@ var helper = {
            zip: zip,
            email: email,
            phone: phone,
-           phoneType: phoneType
+           phoneType: phoneType,
+           designation: designation,
+           team: team
        });
   },
 

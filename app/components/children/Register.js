@@ -28,7 +28,7 @@ class Register extends React.Component {
 //             this.setState({ error: response.data});
 //           }.bind(this));
     
-         helpers.addEmployee(this.state.username, this.state.username, this.state.username, this.state.username, this.state.username, this.state.email, this.state.email, this.state.email, this.state.password, this.state.password).then(function(response) {
+         helpers.addEmployee(this.state.username, this.state.username, this.state.username, this.state.username, this.state.username, this.state.email, this.state.email, this.state.email, this.state.password, this.state.password, this.state.username, this.state.username).then(function(response) {
             this.state.emp_id = response.data._id;
             helpers.addEmpSchedule(this.state.emp_id, this.state.username, this.state.username).then(function(response) {
 //                this.clearStates();

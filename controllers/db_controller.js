@@ -71,6 +71,19 @@ router.put("/updateSchedule/:id", function (req, res) {
     });
 });
 
+
+//Update the leave request , set approve to true or false
+router.put("/updateLeaveRequest/:id", function (req, res) {
+    Leave.findOneAndUpdate({"_id": req.params.leaveId}, {
+        approved: true,
+        if (err) {
+            console.log(err);
+        } else {
+            res.send("Leave request successfully updated");
+        }
+    });
+});
+
 //Posting new Employee to the database
 router.post("/addEmployee", function (req, res) {
     employee.create({
@@ -83,7 +96,9 @@ router.post("/addEmployee", function (req, res) {
         zip: req.body.zip,
         email: req.body.email,
         phone: req.body.phone,
-        phoneType: req.body.phoneType
+        phoneType: req.body.phoneType,
+        designation: req.body.designation,
+        team: req.body.team
     }, function (err, doc) {
         if (err) {
             console.log(err);
@@ -138,7 +153,9 @@ router.put("/updateEmployee/:id", function (req, res) {
         zip: req.body.zip,
         email: req.body.email,
         phone: req.body.phone,
-        phoneType: req.body.phoneType
+        phoneType: req.body.phoneType,
+        designation: req.body.designation,
+        team: req.body.team    
     }, function (err) {
         if (err) {
             console.log(err);
