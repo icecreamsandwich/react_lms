@@ -38,6 +38,9 @@ var EmployeeSchema = new Schema({
     team: {
         type: String
     },
+    user_id: {
+        type: String
+    },
     active: {
         type: Number,
         default: 1

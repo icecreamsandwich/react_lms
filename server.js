@@ -10,6 +10,7 @@
   var path = require("path");
   var db = require("./db/db.js")
   var User = require("./models/user")
+  var employee = require("./models/employee");
 
 //Initialize Express
   var app = express();
@@ -140,18 +141,37 @@
       username: req.body.username,
       email: req.body.email,
       userType: req.body.userType,
-      picture: "https://raw.githubusercontent.com/clsavino/react-shift-scheduler/master/public/assets/images/logo.png"
-    }),
-
+      picture: "https://raw.githubusercontent.com/clsavino/react-shift-scheduler/master/public/assets/images/logo.png",
+      groupId : "",
+      designationId:""
+    }),   
     req.body.password, function(err, user) {
        if(err){
         res.sendFile(path.resolve(__dirname, "public", "error.html"));
         console.log(err);
-       } else {
+       } else {     
+          passport.authenticate("local")(req, res, function() {
+            console.log(user);
+          //Add new user to the employee collection(additional mods)
+          employee.create({
+                firstName: req.body.username,
+                lastName: req.body.username,
+                addressOne: "",
+                addressTwo: "",
+                city: "",
+                state: "",
+                zip: "",
+                email: req.body.email,
+                phone: "",
+                phoneType: "",
+                designation: "",
+                team: "",
+                user_id : user._id
+          }, function(req, res) {           
+          });     
 
-      passport.authenticate("local")(req, res, function() {
-        res.redirect("/");
-      });
+           res.redirect("/");   
+       });
       }
     })
   });

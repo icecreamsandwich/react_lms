@@ -14,24 +14,17 @@ class Register extends React.Component {
     }
 
     this.handleUserChange = this.handleUserChange.bind(this);
-    this.handleLogin = this.handleLogin.bind(this);
+    this.handleRegister = this.handleRegister.bind(this);
   }
 
   handleUserChange(event) {
      this.setState({ [event.target.name]: event.target.value});
   }
 
-  handleLogin() {
-
-//    helpers.errorMessage().then(function(response) {
-//         console.log(response)
-//             this.setState({ error: response.data});
-//           }.bind(this));
-    
+  handleRegister() {    
          helpers.addEmployee(this.state.username, this.state.username, this.state.username, this.state.username, this.state.username, this.state.email, this.state.email, this.state.email, this.state.password, this.state.password, this.state.username, this.state.username).then(function(response) {
             this.state.emp_id = response.data._id;
             helpers.addEmpSchedule(this.state.emp_id, this.state.username, this.state.username).then(function(response) {
-//                this.clearStates();
             }.bind(this));
         }.bind(this));
         Materialize.toast('Registered Successfully', 5000);
@@ -49,8 +42,8 @@ class Register extends React.Component {
                                 <h4> {this.state.error}</h4>
                             </div>
                         </div>
-                {/* action="/register" method="POST" */}
-                        <form method="POST" onSubmit={this.handleLogin}> 
+                {/* action="/register" method="POST" method="POST"*/}
+                        <form method="POST" onSubmit={this.handleRegister}> 
                             <div className="row">
                                 <div className="col s12">
                                     <input
@@ -110,7 +103,7 @@ class Register extends React.Component {
                             </div>
                             <div className="row">
                                 <div className="col s12">
-                                    <button className="btn waves-effect waves-light btn-large blue accent-3 loginButtons" type="submit" value="Submit" name="action">Register<i className="material-icons right">person_add</i></button>
+                                    <button className="btn waves-effect waves-light btn-large blue accent-3 loginButtons" type="Submit" value="Submit" name="action">Register<i className="material-icons right">person_add</i></button>
                                 </div>
                             </div>
                         </form>

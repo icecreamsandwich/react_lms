@@ -26,7 +26,7 @@ class Login extends React.Component {
                     <div className="card-panel">
                         <div className="row grey lighten-5">
                             <div className="col s12 center">
-                                <h4 className="blue-text text-darken-1"><img id="logo" src="/assets/images/logo.png"/><span className="hide-on-med-and-down">Scheduler</span></h4>
+                                <h4 className="blue-text text-darken-1"><img id="logo" src="/assets/images/logo.png"/><span className="hide-on-med-and-down">LMS</span></h4>
                             </div>
                         </div>
                         <form action="/login" method="POST" onSubmit={this.handleLogin}>

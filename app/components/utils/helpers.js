@@ -2,6 +2,10 @@ var axios = require("axios");
 
 var helper = {
 
+  getAllEmployeesFilter: function(groupId) {
+    return axios.get("/getAllEmployeesFilter/"+ groupId);
+  },
+
   getAllEmployees: function() {
     return axios.get("/getAllEmployees");
   },
@@ -9,10 +13,6 @@ var helper = {
   getCurrentUser: function() {
     return axios.get("/user");
   },
-
-  // errorMessage: function() {
-  //   return axios.get("/register");
-  // },
 
   getEmployee: function(id) {
     return axios.get("/getEmployee/" + id);
@@ -40,13 +40,14 @@ var helper = {
   },
 
   //Update the leave request (update approve to true/false)
-  approveLeave: function(leaveId) {
-    return axios.put('/updateLeaveRequest/' + leaveId, {
-      leaveId: leaveId
+  approveLeave: function(id) {
+    return axios.put('/updateLeaveRequest/'+ id, {
+      leaveId: id
     });
   },
 
-  addEmployee: function(firstName, lastName, addressOne, addressTwo, city, state, zip, email, phone, phoneType, designation, team) {
+  addEmployee: function(firstName, lastName, addressOne, addressTwo, 
+    city, state, zip, email, phone, phoneType, designation, team, user_id) {
     return axios.post("/addEmployee", {
         firstName: firstName,
         lastName: lastName,
@@ -59,7 +60,8 @@ var helper = {
         phone: phone,
         phoneType: phoneType,
         designation: designation,
-        team: team 
+        team: team,
+        user_id: user_id 
       });
   },
 
@@ -108,10 +110,10 @@ var helper = {
   },
 
   //Update employee's group id to user schema
-  updateEmpTeam: function(emp_id, teamId)  {
-    return axios.put("/updateEmpTeam/" + emp_id, {
-        emp_id: emp_id,
-        team_id: teamId
+  updateEmpTeam: function(user_id, team_id, design_id)  {
+    return axios.put("/updateEmpTeam/" + user_id, {
+        groupId: team_id,
+        designationId: design_id
        });
   },
 

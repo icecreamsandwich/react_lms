@@ -16,18 +16,29 @@ var ManagerEmployeeAll = React.createClass({
             phoneType: "",
             designation: "",
             team: "",
+            emp_user_id : "",
             allEmployees: [],
             selectedEmployee: "",
-            emp_id: ""
+            emp_id: "" ,  
+            group_id: "" ,  
+            design_id: ""   
         };
     },
 
     componentDidMount: function() {
-        this.getEmployees();        
+        helpers.getCurrentUser().then(function(response) {
+          if (response !== this.state.username) {
+            this.setState({ user_id: response.data._id, 
+                group_id: response.data.groupId,
+                design_id: response.data.designationId
+            });
+          }
+        }.bind(this)); 
+        this.getEmployees();
     },
 
-    getEmployees: function() {
-        helpers.getAllEmployees().then(function(response) {
+    getEmployees: function() {   
+        helpers.getAllEmployees(this.state.group_id).then(function(response) {
             if (response !== this.state.allEmployees) {
                 this.setState({ allEmployees: response.data });
                 this.activeButtons();
@@ -41,9 +52,12 @@ var ManagerEmployeeAll = React.createClass({
 
     handleAddForm: function(event) {
         event.preventDefault();
-        helpers.addEmployee(this.state.firstName, this.state.lastName, this.state.addressOne, this.state.addressTwo, this.state.city, this.state.state, this.state.zip, this.state.email, this.state.phone, this.state.phoneType,
-            this.state.designation,this.state.team).then(function(response) {
-            this.state.emp_id = response.data._id;
+        helpers.addEmployee(this.state.firstName, this.state.lastName, 
+            this.state.addressOne, this.state.addressTwo, this.state.city, 
+            this.state.state, this.state.zip, this.state.email, 
+            this.state.phone, this.state.phoneType,
+            this.state.designation,this.state.team,this.state.user_id).then(function(response) {
+            this.state.emp_user_id = response.data.user_id;
 
             helpers.addEmpSchedule(this.state.emp_id, this.state.firstName, this.state.lastName).then(function(response) {
                 this.clearStates();
@@ -61,12 +75,12 @@ var ManagerEmployeeAll = React.createClass({
              this.state.designation,this.state.team).then(function(response) {
         }.bind(this));
 
-        helpers.updateEmpName(this.state.emp_id, this.state.firstName, this.state.lastName).then(function(response) {
+       /* helpers.updateEmpName(this.state.emp_id, this.state.firstName, this.state.lastName).then(function(response) {
             this.clearStates();
-        }.bind(this));
-
-       /* helpers.updateEmpTeam(this.state.emp_id, this.state.team).then(function(response) {
         }.bind(this));*/
+
+        helpers.updateEmpTeam(this.state.emp_user_id, this.state.team, this.state.designation).then(function(response) {
+        }.bind(this));
 
         Materialize.toast("Employee updated", 3000);
         this.clearForm();
@@ -102,6 +116,7 @@ var ManagerEmployeeAll = React.createClass({
                         phoneType: this.state.allEmployees[i].phoneType,
                         designation: this.state.allEmployees[i].designation,
                         team: this.state.allEmployees[i].team,
+                        emp_user_id: this.state.allEmployees[i].user_id,
                         emp_id: this.state.selectedEmployee
                     });
                     this.activeButtons();
@@ -145,6 +160,13 @@ var ManagerEmployeeAll = React.createClass({
     },
 
     render: function() {
+        {
+            if(this.state.group_id == 6 && this.state.design_id == 6){
+                var filterd_employees = this.state.allEmployees;
+            }else{
+                var filterd_employees = this.state.allEmployees.filter((employees) => employees.team == this.state.group_id );
+            }
+        }           
         return (
             <div className="row">
                 <div className="col m3">
@@ -159,8 +181,8 @@ var ManagerEmployeeAll = React.createClass({
                                 <td id="newEmployee" onClick={this.newEmployee}>
                                     <strong>New Employee<i className="material-icons right">add</i></strong>
                                 </td>
-                            </tr>
-                            {this.state.allEmployees.map(function(ManagerEmployeeAll, i) {
+                            </tr>                           
+                            {filterd_employees.map(function(ManagerEmployeeAll, i) {
                                 return (
                                     <tr key={i}>
                                         <td onClick={this.clickEmployee} id={this.state.allEmployees[i]._id}>
@@ -338,6 +360,8 @@ var ManagerEmployeeAll = React.createClass({
                                   <option value="3">Developer</option>
                                   <option value="4">Support Engineer</option>
                                   <option value="5">HR</option>
+                                  <option value="6">CEO</option>
+                                  <option value="7">CTO</option>
                                 </select>
                               </div>
                               <div className="input-field col m4 s4">
@@ -348,6 +372,7 @@ var ManagerEmployeeAll = React.createClass({
                                   <option value="3">HN</option>
                                   <option value="4">Vodafone</option>
                                   <option value="5">365andUP</option>
+                                  <option value="6">Piserve</option>
                                 </select>
                               </div>
                           </div>

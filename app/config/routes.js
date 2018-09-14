@@ -17,6 +17,7 @@ var ManagerEmployeeAll = require("../components/children/ManagerEmployeeAll");
 var ManagerSchedulesCreate = require("../components/children/ManagerSchedulesCreate");
 var ApplyLeave = require("../components/children/ApplyLeave");
 var LeaveRequests = require("../components/children/LeaveRequests");
+var LeavePolicy = require("../components/children/LeavePolicy");
 
 // employee components
 var Employee = require("../components/Employee");
@@ -35,10 +36,13 @@ module.exports = (
             <Route path="lorem" component={Lorem} />
             <Route path="applyleave" component={ApplyLeave} />
             <Route path="leaveManager" component={LeaveRequests} />
+            <Route path="leavePolicy" component={LeavePolicy} />
             <IndexRoute component={ManagerHome} />
         </Route>        
         <Route path="employee" component={Employee}>
             <Route path="lorem" component={Lorem} />
+            <Route path="applyleave" component={ApplyLeave} />
+            <Route path="leavePolicy" component={LeavePolicy} />
             <IndexRoute component={EmployeeHome} />
         </Route>
     </Route>

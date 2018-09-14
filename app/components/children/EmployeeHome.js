@@ -18,12 +18,6 @@ var EmployeeHome = React.createClass({
          this.getMiscs();
     },
 
-    // componentDidUpdate: function(prevState) {
-    //     if (prevState.title !== this.state.title || prevState.content !== this.state.content) {
-    //         this.getAnnouncements();
-    //     }
-    // },
-
     getAnnouncements: function() {
         helpers.getAnnouncements().then(function(response) {
           this.setState({

@@ -10,7 +10,20 @@ var misc = require("../models/misc");
 var Leave = require("../models/leaverequests");
 var User = require("../models/user");
 
-//Getting Employees from the database
+//Getting Employees based on condition from the database
+router.get("/getAllEmployeesFilter/:groupId", function (req, res) {
+    var groupId = req.params.groupId;
+    employee.find({"active": 1,"team":groupId}).exec(function (err, doc) {
+        if (err) {
+            console.log(err);
+        }
+        else {
+            res.send(doc);
+        }
+    });
+});
+
+//Getting All Employees from the database
 router.get("/getAllEmployees", function (req, res) {
     employee.find({"active": 1}).exec(function (err, doc) {
         if (err) {
@@ -74,12 +87,13 @@ router.put("/updateSchedule/:id", function (req, res) {
 
 //Update the leave request , set approve to true or false
 router.put("/updateLeaveRequest/:id", function (req, res) {
-    Leave.findOneAndUpdate({"_id": req.params.leaveId}, {
+    Leave.findOneAndUpdate({"_id": req.params.id}, {
         approved: true,
+    }, function (err) {
         if (err) {
             console.log(err);
         } else {
-            res.send("Leave request successfully updated");
+            res.send("Leave Successfully updated");
         }
     });
 });
@@ -105,6 +119,7 @@ router.post("/addEmployee", function (req, res) {
         }
         else {
             res.send(doc);
+            res.send("Employee added successfully");
         }
     });
 });
@@ -181,13 +196,15 @@ router.put("/updateEmpName/:emp_id", function (req, res) {
 
 // Update employee's group id in users collection
 router.put("/updateEmpTeam/:id", function (req, res) {
-    User.findOneAndUpdate({"_id": req.params.emp_id}, {
-        group_id: req.body.team_id,
-    }, function (err) {
+    User.findOneAndUpdate({"_id": req.params.id}, {
+        groupId: req.body.groupId,
+        designationId: req.body.designationId,
+    }, function (err,doc) {
         if (err) {
             console.log(err);
         } else {
             res.send("Employee's team is updated");
+            console.log(doc);
         }
     });
 });

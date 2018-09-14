@@ -133,13 +133,15 @@ var LeaveForm = React.createClass({
                                                             
                                         <div className="row">
                                             <div className="col s4">
-                                                <button id="addEmployee" className="btn btn-large waves-effect waves-light green accent-3" type="submit" value="Submit">Approve
+                                                <button id="approveLeave" className="btn btn-large waves-effect waves-light green accent-3" type="submit" value="Submit">Approve
                                                     <i className="material-icons right">person_add</i>
                                                 </button>
-                                                <button id="addEmployee" className="btn btn-large waves-effect waves-light red accent-3" type="submit" value="Submit">Decline
-                                                    <i className="material-icons right">person_add</i>
-                                                </button>
-                                            </div>                          
+                                            </div>  
+                                            <div className="col s4">
+                                                <a id="declineLeave" className="btn btn-large waves-effect waves-light red accent-3" onClick={this.declineLeaveHandler}>Decline
+                                                    <i className="material-icons right">person_outline</i>
+                                                </a>
+                                            </div>                        
                                         </div>
                                     </form>
                                 </div>
