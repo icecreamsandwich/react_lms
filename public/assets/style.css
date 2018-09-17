@@ -34,6 +34,9 @@
 #newEmployee {
 	cursor: pointer;
 }
+.employeeList {
+	cursor: pointer;
+}
 
 #error {
 	font-size: 175px;

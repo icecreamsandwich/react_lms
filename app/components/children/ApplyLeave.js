@@ -22,7 +22,9 @@ var ApplyLeave = React.createClass({
           if (response !== this.state.username) {
             this.setState({ picture: response.data.picture, 
                 username: response.data.username,
-                user_id: response.data._id 
+                user_id: response.data._id,
+                group_id: response.data.groupId,
+                design_id: response.data.designationId
             });
             this.activeButtons();
           }
@@ -35,7 +37,7 @@ var ApplyLeave = React.createClass({
 
     handleAddForm: function(event) {
         event.preventDefault();
-        helpers.addLeave(this.state.user_id, this.state.username, this.state.username ,this.state.leaveTitle, this.state.leaveBody).then(function(response) {
+        helpers.addLeave(this.state.user_id, this.state.group_id, this.state.username ,this.state.leaveTitle, this.state.leaveBody).then(function(response) {
         }.bind(this));
         Materialize.toast('Leave Requested Successfully', 3000);
         this.clearForm();

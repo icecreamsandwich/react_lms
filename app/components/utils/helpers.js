@@ -6,7 +6,7 @@ var helper = {
     return axios.get("/getAllEmployeesFilter/"+ groupId);
   },
 
-  getAllEmployees: function() {
+  getAllEmployees: function(groupId) {
     return axios.get("/getAllEmployees");
   },
 
@@ -66,10 +66,10 @@ var helper = {
   },
 
   //Add leave request
-  addLeave: function(userId,groupName,userName,leaveTitle,leaveBody) {
+  addLeave: function(userId,groupId,userName,leaveTitle,leaveBody) {
     return axios.post("/addLeave", {
         userId: userId,
-        groupName: groupName,
+        groupId: groupId,
         userName: userName,
         leaveTitle: leaveTitle,
         leaveBody: leaveBody,       
@@ -98,7 +98,8 @@ var helper = {
            phone: phone,
            phoneType: phoneType,
            designation: designation,
-           team: team
+           team: team,
+           active: 1
        });
   },
 
@@ -113,7 +114,8 @@ var helper = {
   updateEmpTeam: function(user_id, team_id, design_id)  {
     return axios.put("/updateEmpTeam/" + user_id, {
         groupId: team_id,
-        designationId: design_id
+        designationId: design_id,
+        active: 1
        });
   },
 

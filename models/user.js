@@ -8,7 +8,11 @@ var UserSchema = new mongoose.Schema({
 	picture: String,
 	password: String,
 	groupId: String,
-	designationId: String
+	designationId: String,
+	active: {
+        type: Number,
+        default: 0
+    }
 });
 
 UserSchema.plugin(passportLocalMongoose);

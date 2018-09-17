@@ -143,7 +143,8 @@
       userType: req.body.userType,
       picture: "https://raw.githubusercontent.com/clsavino/react-shift-scheduler/master/public/assets/images/logo.png",
       groupId : "",
-      designationId:""
+      designationId:"",
+      active:0
     }),   
     req.body.password, function(err, user) {
        if(err){
@@ -166,7 +167,8 @@
                 phoneType: "",
                 designation: "",
                 team: "",
-                user_id : user._id
+                user_id : user._id,
+                active:0
           }, function(req, res) {           
           });     
 

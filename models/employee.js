@@ -43,7 +43,7 @@ var EmployeeSchema = new Schema({
     },
     active: {
         type: Number,
-        default: 1
+        default: 0
     }
 });
 

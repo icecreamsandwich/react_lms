@@ -25,7 +25,7 @@ router.get("/getAllEmployeesFilter/:groupId", function (req, res) {
 
 //Getting All Employees from the database
 router.get("/getAllEmployees", function (req, res) {
-    employee.find({"active": 1}).exec(function (err, doc) {
+    employee.find().exec(function (err, doc) { //{"active": 1}
         if (err) {
             console.log(err);
         }
@@ -128,7 +128,7 @@ router.post("/addEmployee", function (req, res) {
 router.post("/addLeave", function (req, res) {
     Leave.create({
         emp_id: req.body.userId,
-        group_id: req.body.userId,
+        group_id: req.body.groupId,
         firstName: req.body.userName,
         leaveTitle: req.body.leaveTitle,
         leaveBody: req.body.leaveBody,
@@ -170,7 +170,8 @@ router.put("/updateEmployee/:id", function (req, res) {
         phone: req.body.phone,
         phoneType: req.body.phoneType,
         designation: req.body.designation,
-        team: req.body.team    
+        team: req.body.team,
+        active: req.body.active
     }, function (err) {
         if (err) {
             console.log(err);
@@ -199,6 +200,7 @@ router.put("/updateEmpTeam/:id", function (req, res) {
     User.findOneAndUpdate({"_id": req.params.id}, {
         groupId: req.body.groupId,
         designationId: req.body.designationId,
+        active: req.body.active
     }, function (err,doc) {
         if (err) {
             console.log(err);

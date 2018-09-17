@@ -24,6 +24,15 @@ var LeaveRequests = React.createClass({
                 this.setState({ LeaveRequests: response.data });
             }
         }.bind(this));
+         //Get current user details 
+         helpers.getCurrentUser().then(function(response) {
+          if (response !== this.state.username) {
+            this.setState({ user_id: response.data._id, 
+                group_id: response.data.groupId,
+                design_id: response.data.designationId
+            });
+          }
+        }.bind(this));
     },
 
     leaveClickHandler: function(event) {
@@ -69,7 +78,7 @@ var LeaveRequests = React.createClass({
                                         <td className="schedule">
                                             {leaveRequests.leaveTitle}
                                         </td>
-                                        <td onClick={this.leaveClickHandler} id={leaveRequests._id}>
+                                        <td className="employeeList" onClick={this.leaveClickHandler} id={leaveRequests._id}>
                                             {leaveRequests.leaveBody}
                                         </td>
                                         <td>

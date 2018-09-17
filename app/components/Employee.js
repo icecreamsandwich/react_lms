@@ -14,19 +14,28 @@ var Employee = React.createClass({
     componentDidMount: function() {
        helpers.getCurrentUser().then(function(response) {
           if (response !== this.state.username) {
-            this.setState({ picture: response.data.picture, username: response.data.username });
+            this.setState({ picture: response.data.picture, 
+                username: response.data.username,
+                user_id: response.data._id,
+                active: response.data.active 
+            });
           }
         }.bind(this));
     },
 
     render: function() {
+    if (this.state.active==1) {
+      applyleave = <li><a className="black-text" href="/employee/applyleave">Apply for Leave</a></li>;
+    } else {
+      applyleave = ""
+    }
         return (
             <div>
                 <ul id="dropdown1" className="dropdown-content">
                     <li><a className="black-text" href="/logout">Logout<i className="material-icons right">exit_to_app</i></a></li>
                 </ul>
                 <ul id="dropdown2" className="dropdown-content">
-                    <li><a className="black-text" href="/employee/applyleave">Apply for Leave</a></li>
+                    {applyleave}
                     <li><a className="black-text" href="/employee/leavePolicy">Leave Policy</a></li>
                 </ul>
                 <nav>
