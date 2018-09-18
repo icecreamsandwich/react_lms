@@ -21,7 +21,12 @@ class Register extends React.Component {
      this.setState({ [event.target.name]: event.target.value});
   }
 
-  handleRegister() {    
+  handleRegister(e) {             
+        if(this.state.password !== this.state.passwordConfirmation){
+            Materialize.toast('Passwords do not match', 5000,'red rounded');
+            e.preventDefault();
+            return false ;
+        }
          helpers.addEmployee(this.state.username, this.state.username, this.state.username, this.state.username, this.state.username, this.state.email, this.state.email, this.state.email, this.state.password, this.state.password, this.state.username, this.state.username).then(function(response) {
             this.state.emp_id = response.data._id;
             helpers.addEmpSchedule(this.state.emp_id, this.state.username, this.state.username).then(function(response) {
@@ -98,6 +103,7 @@ class Register extends React.Component {
                                         <option defaultValue="" disabled selected>Select User Type</option>
                                         <option value="employee">Employee</option>
                                         <option value="manager">Manager</option>
+                                        <option value="su">Super User</option>
                                     </select>
                                 </div>
                             </div>

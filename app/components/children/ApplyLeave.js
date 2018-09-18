@@ -1,5 +1,6 @@
 var React = require("react");
 var helpers = require("../utils/helpers");
+// import DatePicker  from "react-datepicker";
 
 var ApplyLeave = React.createClass({
     getInitialState: function() {
@@ -13,7 +14,8 @@ var ApplyLeave = React.createClass({
             allLeaves : [],
             username: "",
             picture: "",
-            user_id:""
+            user_id:"",
+            leavetype:"",
         };
     },
 
@@ -31,15 +33,20 @@ var ApplyLeave = React.createClass({
         }.bind(this));
     },
 
-    handleUserChange(event) {
+    handleUserChange(event) {      
        this.setState({ [event.target.name]: event.target.value});
+       this.setState({
+         // startDate: date
+       });
     },
 
     handleAddForm: function(event) {
         event.preventDefault();
-        helpers.addLeave(this.state.user_id, this.state.group_id, this.state.username ,this.state.leaveTitle, this.state.leaveBody).then(function(response) {
+        helpers.addLeave(this.state.user_id, this.state.group_id, this.state.username ,
+            this.state.leaveTitle, 
+            this.state.leaveBody, this.state.leavetype).then(function(response) {
         }.bind(this));
-        Materialize.toast('Leave Requested Successfully', 3000);
+        Materialize.toast('Leave Requested Successfully', 3000,'blue rounded');
         this.clearForm();
     },
 
@@ -64,6 +71,22 @@ var ApplyLeave = React.createClass({
                 <div className="col m9">
                     <div className="row">
                         <form className="col m12" onSubmit={this.handleAddForm}>
+                        <div className="row">
+                                <div className="input-field col m3 s6">
+                                    <select className="browser-default" name="leavetype" value={this.state.leavetype} onChange={this.handleUserChange} required>
+                                        <option value="" disabled>Leave Type</option>
+                                        <option value="CL">Casual Leave</option>
+                                        <option value="SL">Sick Leave</option>
+                                        <option value="AL">Annual Leave</option>
+                                    </select>
+                                </div>
+                                <div className="row">
+                                {/*<DatePicker
+                                   selected={this.state.startDate}
+                                   onChange={this.handleChange}
+                                />*/}
+                                </div>
+                            </div>
                             <div className="row">
                                 <div className="input-field col m6 s12">
                                     <input

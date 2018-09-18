@@ -40,9 +40,10 @@ var helper = {
   },
 
   //Update the leave request (update approve to true/false)
-  approveLeave: function(id) {
+  approveLeave: function(id,userId,leaveType) {
     return axios.put('/updateLeaveRequest/'+ id, {
-      leaveId: id
+      userId: userId,
+      leaveType: leaveType,
     });
   },
 
@@ -66,19 +67,28 @@ var helper = {
   },
 
   //Add leave request
-  addLeave: function(userId,groupId,userName,leaveTitle,leaveBody) {
+  addLeave: function(userId,groupId,userName,leaveTitle,leaveBody,leaveType) {
     return axios.post("/addLeave", {
         userId: userId,
         groupId: groupId,
         userName: userName,
         leaveTitle: leaveTitle,
         leaveBody: leaveBody,       
+        leaveType: leaveType,       
       });
   },
 
 //List all leave requests
   getleaveRequests: function() {
     return axios.get('/getALLLeaveRequests')
+    .then(function(response){
+        return response;
+    })
+  },
+
+  //Get all leave details of the user
+  getAllleaveDetails: function() {
+    return axios.get('/getAllLeaveDetails')
     .then(function(response){
         return response;
     })

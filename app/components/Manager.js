@@ -29,6 +29,7 @@ var Manager = React.createClass({
                     <li><a className="black-text" href="/manager/applyleave">Apply for Leave</a></li>
                     <li><a className="black-text" href="/manager/leaveManager">Leave Management</a></li>
                     <li><a className="black-text" href="/manager/leavePolicy">Leave Policy</a></li>
+                    <li><a className="black-text" href="/manager/leaveDetails">Leave Details</a></li>
                 </ul>
                 <nav>
                     <div className="nav-wrapper grey lighten-5">

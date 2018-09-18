@@ -30,7 +30,8 @@ var ManagerEmployeeAll = React.createClass({
           if (response !== this.state.username) {
             this.setState({ user_id: response.data._id, 
                 group_id: response.data.groupId,
-                design_id: response.data.designationId
+                design_id: response.data.designationId,
+                user_type: response.data.userType
             });
           }
         }.bind(this)); 
@@ -157,7 +158,10 @@ var ManagerEmployeeAll = React.createClass({
 
     render: function() {
         {
-            if(this.state.group_id == 6 && 
+            if(this.state.user_type=="su"){
+                var filterd_employees = this.state.allEmployees;
+            }
+            else if(this.state.group_id == 6 && 
                 (this.state.design_id == 5 || this.state.design_id == 6 || this.state.design_id == 7)){
                 var filterd_employees = this.state.allEmployees;
             }else{
@@ -306,6 +310,8 @@ var ManagerEmployeeAll = React.createClass({
                                   <option value="2">Team Leader</option>
                                   <option value="3">Developer</option>
                                   <option value="4">Support Engineer</option>
+                                  <option value="8">Designer</option>
+                                  <option value="9">SEO Specialist</option>
                                   <option value="5">HR</option>
                                   <option value="6">CEO</option>
                                   <option value="7">CTO</option>

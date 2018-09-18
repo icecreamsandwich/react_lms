@@ -42,6 +42,7 @@ var LeaveRequests = React.createClass({
             if (this.state.LeaveRequests[i]._id == event.target.id) {
                     this.setState({
                         firstName: this.state.LeaveRequests[i].firstName,
+                        leaveType: this.state.LeaveRequests[i].leaveType,
                         leaveTitle: this.state.LeaveRequests[i].leaveTitle,
                         leaveBody: this.state.LeaveRequests[i].leaveBody,
                         group_id: this.state.LeaveRequests[i].group_id,
@@ -62,10 +63,10 @@ var LeaveRequests = React.createClass({
                             <thead>
                                 <tr>
                                     <th data-field="name">Requester</th>
+                                    <th data-field="name">Leave Type</th>
                                     <th data-field="name">Title</th>
                                     <th data-field="name">Body</th>
                                     <th data-field="name">Date</th>
-                                    <th data-field="name">Team</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -75,6 +76,9 @@ var LeaveRequests = React.createClass({
                                         <td className="fullName">
                                             {leaveRequests.firstName}
                                         </td>
+                                        <td className="fullName">
+                                            {leaveRequests.leaveType}
+                                        </td>
                                         <td className="schedule">
                                             {leaveRequests.leaveTitle}
                                         </td>
@@ -83,10 +87,7 @@ var LeaveRequests = React.createClass({
                                         </td>
                                         <td>
                                             {leaveRequests.datetime}
-                                        </td>  
-                                        <td>
-                                            {leaveRequests.group_id}
-                                        </td>                              
+                                        </td>                     
                                     </tr>
                                 );
                             }, this)}
@@ -105,9 +106,9 @@ var LeaveForm = React.createClass({
 
     leaveFormSubmitHandler: function(event) {
         event.preventDefault();
-        helpers.approveLeave(this.props.leaveData._id).then(function(response) {
+        helpers.approveLeave(this.props.leaveData._id,this.props.leaveData.emp_id,this.props.leaveData.leaveType).then(function(response) {
         }.bind(this));
-        Materialize.toast('Leave Approved Successfully', 3000);
+        Materialize.toast('Leave Approved Successfully', 3000,'green rounded');
     },
 
                     render: function() {
@@ -125,6 +126,17 @@ var LeaveForm = React.createClass({
                                                     type="text"
                                                     className="validate"
                                                     value={this.props.leaveData.leaveTitle}                                                   
+                                                    required readOnly/>
+                                            </div>
+                                        </div>
+                                        <div className="row">
+                                            <div className="input-field col m6 s12">
+                                                <input
+                                                    placeholder="Leave Type"
+                                                    name="leavetype"
+                                                    type="text"
+                                                    className="validate"
+                                                    value={this.props.leaveData.leaveType}                                                   
                                                     required readOnly/>
                                             </div>
                                         </div>
