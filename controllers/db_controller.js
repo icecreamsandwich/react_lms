@@ -8,6 +8,7 @@ var EmployeeSchedule = require("../models/employeeSchedule");
 var announcements = require("../models/announcements");
 var misc = require("../models/misc");
 var Leave = require("../models/leaverequests");
+var LeaveDetails = require("../models/leavedetails");
 var User = require("../models/user");
 
 //Getting Employees based on condition from the database
@@ -26,6 +27,18 @@ router.get("/getAllEmployeesFilter/:groupId", function (req, res) {
 //Getting All Employees from the database
 router.get("/getAllEmployees", function (req, res) {
     employee.find().exec(function (err, doc) { //{"active": 1}
+        if (err) {
+            console.log(err);
+        }
+        else {
+            res.send(doc);
+        }
+    });
+});
+
+//Getting All Employees leave details
+router.get("/getAllLeaveDetails", function (req, res) {
+    LeaveDetails.find().exec(function (err, doc) {
         if (err) {
             console.log(err);
         }
@@ -87,15 +100,30 @@ router.put("/updateSchedule/:id", function (req, res) {
 
 //Update the leave request , set approve to true or false
 router.put("/updateLeaveRequest/:id", function (req, res) {
+
+    //check the leave type 
+    if(req.body.leaveType == "CL") var LeaveType ={CL: -1};
+    else if(req.body.leaveType == "SL") var LeaveType ={SL: -1};
+    else if(req.body.leaveType == "AL") var LeaveType ={AL: -1};
+     
     Leave.findOneAndUpdate({"_id": req.params.id}, {
         approved: true,
     }, function (err) {
         if (err) {
             console.log(err);
-        } else {
-            res.send("Leave Successfully updated");
+        } else {        
+           //Update the leave details collection 
+            LeaveDetails.findOneAndUpdate({"user_id": req.body.userId}, 
+                { $inc:LeaveType}, function (err) {
+                if (err) {
+                    console.log(err);
+                } else {  
+                    res.send("Leave Details Successfully updated");
+                }
+            });
         }
     });
+
 });
 
 //Posting new Employee to the database
@@ -132,6 +160,7 @@ router.post("/addLeave", function (req, res) {
         firstName: req.body.userName,
         leaveTitle: req.body.leaveTitle,
         leaveBody: req.body.leaveBody,
+        leaveType: req.body.leaveType,
         approved: false,
     }, function (err, doc) {
         if (err) {
@@ -146,7 +175,7 @@ router.post("/addLeave", function (req, res) {
 
 //Getting All Leave Requests from the database
 router.get("/getALLLeaveRequests", function (req, res) {
-    Leave.find({"approved": false}).exec(function (err, doc) {
+    Leave.find().exec(function (err, doc) { //{"approved": false}
         if (err) {
             console.log(err);
         }

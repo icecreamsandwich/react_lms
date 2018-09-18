@@ -14,6 +14,14 @@ var LeaveRequestsSchema = new Schema({
         type: String,
         default: ""
     },
+    leaveType: {
+        type: String,
+        default: ""
+    },
+    noOfLeaves: {
+        type: String,
+        default: ""
+    },
     leaveTitle: {
         type: String,
         default: ""

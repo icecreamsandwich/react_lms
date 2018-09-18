@@ -24,10 +24,12 @@ var Employee = React.createClass({
     },
 
     render: function() {
-    if (this.state.active==1) {
-      applyleave = <li><a className="black-text" href="/employee/applyleave">Apply for Leave</a></li>;
-    } else {
-      applyleave = ""
+    { 
+        if (this.state.active==1) {
+          var applyleave = <li><a className="black-text" href="/employee/applyleave">Apply for Leave</a></li>;
+        } else if (!this.state.active) {
+          var applyleave = "";
+        }
     }
         return (
             <div>
@@ -37,6 +39,7 @@ var Employee = React.createClass({
                 <ul id="dropdown2" className="dropdown-content">
                     {applyleave}
                     <li><a className="black-text" href="/employee/leavePolicy">Leave Policy</a></li>
+                    <li><a className="black-text" href="/employee/leaveDetails">Leave Details</a></li>
                 </ul>
                 <nav>
                     <div className="nav-wrapper grey lighten-5">

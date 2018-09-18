@@ -11,6 +11,7 @@
   var db = require("./db/db.js")
   var User = require("./models/user")
   var employee = require("./models/employee");
+  var leavedetails = require("./models/leavedetails");
 
 //Initialize Express
   var app = express();
@@ -169,9 +170,13 @@
                 team: "",
                 user_id : user._id,
                 active:0
-          }, function(req, res) {           
-          });     
-
+              }, function(req, res) {           
+          });  
+          //Add users details to the leave details collection 
+          leavedetails.create({
+                user_id : user._id,
+             }, function(req, res) {         
+          });  
            res.redirect("/");   
        });
       }
@@ -194,7 +199,7 @@
   }
 
   function reRoute(req,res){
-     if (req.user.userType === "manager") {
+     if (req.user.userType === "manager" || req.user.userType === "su") {
       res.redirect("/manager");
     } else {
       res.redirect("/employee");
@@ -223,7 +228,7 @@
   });
 
   app.get("/manager", isLoggedIn, function(req,res) {
-    if (req.user.userType === "manager") {
+    if (req.user.userType === "manager" || req.user.userType === "su") {
         res.sendFile(path.resolve(__dirname, "public", "index.html"))
     } else {
         res.sendFile(path.resolve(__dirname, "public", "notauth.html"))
@@ -231,7 +236,7 @@
   });
 
   app.get("/manager/*", isLoggedIn, function(req,res) {
-    if (req.user.userType === "manager") {
+    if (req.user.userType === "manager" || req.user.userType === "su") {
         res.sendFile(path.resolve(__dirname, "public", "index.html"))
     } else {
         res.sendFile(path.resolve(__dirname, "public", "notauth.html"))
