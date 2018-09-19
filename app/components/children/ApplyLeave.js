@@ -16,6 +16,7 @@ var ApplyLeave = React.createClass({
             picture: "",
             user_id:"",
             leavetype:"",
+            leaveNo:"",
         };
     },
 
@@ -85,6 +86,18 @@ var ApplyLeave = React.createClass({
                                    selected={this.state.startDate}
                                    onChange={this.handleChange}
                                 />*/}
+                                </div>
+                            </div>
+                            <div className="row">
+                                <div className="input-field col m6 s12">
+                                    <input
+                                        placeholder="No.Of leaves"
+                                        name="leaveNo"
+                                        type="text"
+                                        className="validate"
+                                        value={this.state.leaveNo}
+                                        onChange={this.handleUserChange}
+                                        required />
                                 </div>
                             </div>
                             <div className="row">

@@ -41,6 +41,10 @@ var EmployeeSchema = new Schema({
     user_id: {
         type: String
     },
+    doj: {
+        type: Date,
+        default: "",
+    },
     active: {
         type: Number,
         default: 0

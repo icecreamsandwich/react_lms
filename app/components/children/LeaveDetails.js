@@ -43,7 +43,7 @@ var LeaveDetails = React.createClass({
                 <div className="col s12">
                     <div className="section">
                         <h5>Leave Details (2017-2018)</h5>
-                        <table className="bordered highlight">
+                        <table className="bordered highlight striped">
                             <thead>
                                 <tr>
                                     <th data-field="name">CL</th>
