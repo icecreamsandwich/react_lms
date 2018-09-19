@@ -14,6 +14,7 @@ var LeaveRequests = React.createClass({
             datetime: "",
             LeaveRequests: [],
             selectedLeaveRequest: [],
+            leaveDetails: [],
         };
     },
 
@@ -32,7 +33,11 @@ var LeaveRequests = React.createClass({
                 design_id: response.data.designationId
             });
           }
-        }.bind(this));
+        }.bind(this));       
+
+        helpers.getAllleaveDetails().then(function(response) {
+                this.setState({ leaveDetails: response.data });
+        }.bind(this));  
     },
 
     leaveClickHandler: function(event) {
@@ -50,7 +55,7 @@ var LeaveRequests = React.createClass({
                         selectedLeaveRequest: this.state.LeaveRequests[i]
                     });
             }        
-        } 
+        }       
     },
 
     render: function() {
@@ -96,7 +101,8 @@ var LeaveRequests = React.createClass({
                     </div>
                 </div>
                 {/*Render the approval form here */}
-                { this.state.showForm ? <LeaveForm leaveData={this.state.selectedLeaveRequest} /> : null }
+                { this.state.showForm ? <LeaveForm leaveData={this.state.selectedLeaveRequest} 
+                    leaveDetails={this.state.leaveDetails}/> : null }
             </div>
         );
     }
@@ -104,9 +110,34 @@ var LeaveRequests = React.createClass({
 
 var LeaveForm = React.createClass({
 
+    getInitialState: function() {
+        return {
+            leaveTypeStr : this.props.leaveData.leaveType,
+        };
+    },
+    
+    getDefaultProps: function() {
+        return {
+          leaveTypeStr: ""
+        };
+    },
     leaveFormSubmitHandler: function(event) {
         event.preventDefault();
-        helpers.approveLeave(this.props.leaveData._id,this.props.leaveData.emp_id,this.props.leaveData.leaveType).then(function(response) {
+        var leaveTypeStr = "";  
+        var filterd_leave_details = this.props.leaveDetails.filter((leaves) => 
+            (leaves.user_id == this.props.leaveData.emp_id));
+            filterd_leave_details.map(function(leave_details, i){
+                 var CL = leave_details.CL;
+                 var SL = leave_details.SL;
+                 var AL = leave_details.AL;
+                 if (CL == 0 && SL != 0 && AL != 0 )leaveTypeStr = "SL";
+                 else if(CL == 0 && SL == 0 && AL != 0 )leaveTypeStr = "AL";
+                 else if(CL == 0 && SL == 0 && AL == 0 )leaveTypeStr = "LOP";
+                 else leaveTypeStr = this.props.leaveData.leaveType;
+            });
+
+        helpers.approveLeave(this.props.leaveData._id,this.props.leaveData.emp_id,
+            this.state.leaveTypeStr).then(function(response) {
         }.bind(this));
         Materialize.toast('Leave Approved Successfully', 3000,'green rounded');
     },

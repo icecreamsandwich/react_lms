@@ -105,6 +105,7 @@ router.put("/updateLeaveRequest/:id", function (req, res) {
     if(req.body.leaveType == "CL") var LeaveType ={CL: -1};
     else if(req.body.leaveType == "SL") var LeaveType ={SL: -1};
     else if(req.body.leaveType == "AL") var LeaveType ={AL: -1};
+    else if(req.body.leaveType == "LOP") var LeaveType ={LOP: +1};
      
     Leave.findOneAndUpdate({"_id": req.params.id}, {
         approved: true,
