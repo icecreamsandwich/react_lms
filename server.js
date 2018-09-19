@@ -13,9 +13,18 @@
   var employee = require("./models/employee");
   var leavedetails = require("./models/leavedetails");
 
+
 //Initialize Express
   var app = express();
   var PORT = process.env.PORT || 1010;
+
+  //NodeMailer configurations//
+  app.use(function (req, res, next) {
+   res.header("Access-Control-Allow-Origin", "*");
+   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+   next();
+  });
+  //NodeMailer configurations//
 
 //Express session
   app.use(require("express-session")({

@@ -2,6 +2,8 @@ var express = require("express");
 var router = express.Router();
 var db = require("../db/db.js");
 var path = require("path");
+var nodemailer = require('nodemailer');
+
 
 var employee = require("../models/employee");
 var EmployeeSchedule = require("../models/employeeSchedule");
@@ -10,6 +12,8 @@ var misc = require("../models/misc");
 var Leave = require("../models/leaverequests");
 var LeaveDetails = require("../models/leavedetails");
 var User = require("../models/user");
+//NodeMailer configurations//
+const creds = require('../mail_config/config');
 
 //Getting Employees based on condition from the database
 router.get("/getAllEmployeesFilter/:groupId", function (req, res) {
@@ -119,6 +123,7 @@ router.put("/updateLeaveRequest/:id", function (req, res) {
                 if (err) {
                     console.log(err);
                 } else {  
+                    //Send mail to the employee and HR that leave is approved
                     res.send("Leave Details Successfully updated");
                 }
             });
@@ -168,6 +173,7 @@ router.post("/addLeave", function (req, res) {
             console.log(err);
         }
         else {
+            //Send leave request mail to the manager and HR 
             res.send(doc);
         }
     });
@@ -299,11 +305,6 @@ router.post("/addAnnouncements", function (req, res) {
             console.log(err);
         }
         else {
-//            //Put miscs to db    
-//            misc.create({
-//                title: req.body.title,
-//                content: req.body.content
-//            });
             res.send(doc);
         }
     });
@@ -322,6 +323,51 @@ router.post("/addMiscs", function (req, res) {
             res.send(doc);
         }
     });
+});
+
+// Send Email functionality
+router.post("/sendEmail", function (req, res){
+    var transport = {
+        host: 'smtp.gmail.com',
+        auth: {
+          user: creds.USER,
+          pass: creds.PASS
+        }
+    }
+    
+    var name = req.body.name
+    var email = req.body.email
+    var message = req.body.message
+    var content = `name: ${name} \n email: ${email} \n message: ${message} `
+
+    var transporter = nodemailer.createTransport(transport)
+
+    transporter.verify((error, success) => {
+      if (error) {
+        console.log(error);
+      } else {
+        console.log('Server is ready to take messages');
+      }
+    });
+
+    var mail = {
+        from: name,
+        to: 'muneebkt@gmail.com',  //Change to email address that you want to receive messages on
+        subject: 'New Message from Contact Form',
+        text: content
+    }
+
+    transporter.sendMail(mail, (err, data) => {
+        if (err) {
+          res.json({
+            msg: 'fail'
+          })
+        } else {
+          res.json({
+            msg: 'success'
+          })
+        }
+    })
 });
 
 module.exports = router;

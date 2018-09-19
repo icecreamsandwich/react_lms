@@ -31,6 +31,7 @@
     "moment-timezone": "^0.5.21",
     "mongoose": "^4.7.3",
     "morgan": "^1.7.0",
+    "nodemailer": "^4.6.8",
     "passport": "^0.3.2",
     "passport-google-auth": "^1.0.1",
     "passport-google-oauth": "^1.0.0",

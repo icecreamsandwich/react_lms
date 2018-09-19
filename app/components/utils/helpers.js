@@ -154,7 +154,16 @@ var helper = {
     return axios.post("/addMiscs", {
         title: title,
         content: content });
-  }
+  },
+  
+    //Send email functionality
+    sendMail:function(name,email,message) {
+      return axios.post('/sendEmail', {
+        name: name,
+        email: email,
+        message: message
+      });
+    },
 };
 
 module.exports = helper;

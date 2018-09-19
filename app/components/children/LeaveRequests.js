@@ -64,7 +64,7 @@ var LeaveRequests = React.createClass({
                 <div className="col s12">
                     <div className="section">
                         <h5>Leave Requests</h5>
-                        <table className="bordered highlight">
+                        <table className="bordered highlight striped">
                             <thead>
                                 <tr>
                                     <th data-field="name">Requester</th>
@@ -137,7 +137,7 @@ var LeaveForm = React.createClass({
             });
 
         helpers.approveLeave(this.props.leaveData._id,this.props.leaveData.emp_id,
-            this.state.leaveTypeStr).then(function(response) {
+            leaveTypeStr).then(function(response) {
         }.bind(this));
         Materialize.toast('Leave Approved Successfully', 3000,'green rounded');
     },

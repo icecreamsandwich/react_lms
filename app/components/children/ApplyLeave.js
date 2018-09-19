@@ -1,6 +1,5 @@
 var React = require("react");
 var helpers = require("../utils/helpers");
-// import DatePicker  from "react-datepicker";
 
 var ApplyLeave = React.createClass({
     getInitialState: function() {
@@ -16,7 +15,7 @@ var ApplyLeave = React.createClass({
             picture: "",
             user_id:"",
             leavetype:"",
-            leaveNo:"",
+            leaveday:"",
         };
     },
 
@@ -32,6 +31,14 @@ var ApplyLeave = React.createClass({
             this.activeButtons();
           }
         }.bind(this));
+        //Apply date picker to the Leave day field
+         /*var elem = $('.datepicker')
+         var options = {}
+         var instance = M.Datepicker.init(elem, options);*/
+        $('.datepicker').pickadate({
+          selectMonths: true, // Creates a dropdown to control month
+          selectYears: 15 // Creates a dropdown of 15 years to control year
+        });
     },
 
     handleUserChange(event) {      
@@ -82,20 +89,16 @@ var ApplyLeave = React.createClass({
                                     </select>
                                 </div>
                                 <div className="row">
-                                {/*<DatePicker
-                                   selected={this.state.startDate}
-                                   onChange={this.handleChange}
-                                />*/}
                                 </div>
                             </div>
                             <div className="row">
                                 <div className="input-field col m6 s12">
                                     <input
-                                        placeholder="No.Of leaves"
-                                        name="leaveNo"
+                                        placeholder="Day"
+                                        name="leaveday"
                                         type="text"
-                                        className="validate"
-                                        value={this.state.leaveNo}
+                                        className="validate datepicker"
+                                        value={this.state.leaveday}
                                         onChange={this.handleUserChange}
                                         required />
                                 </div>
@@ -103,7 +106,7 @@ var ApplyLeave = React.createClass({
                             <div className="row">
                                 <div className="input-field col m6 s12">
                                     <input
-                                        placeholder="Leave Title"
+                                        placeholder="Leave Subject"
                                         name="leaveTitle"
                                         type="text"
                                         className="validate"

@@ -1,3 +1,4 @@
 node_modules
+.env
 public/bundle.js
-yarn.lock
+public/index.html

@@ -21,11 +21,21 @@ var ManagerEmployeeAll = React.createClass({
             selectedEmployee: "",
             emp_id: "" ,  
             group_id: "" ,  
-            design_id: ""   
+            design_id: "" ,
+            doj: "",
+            showEmployeeForm : false,
+            employeeForm :""
         };
     },
 
     componentDidMount: function() {
+
+         //Apply date picker to the Leave day field
+        $('.datepicker').pickadate({
+          selectMonths: true, // Creates a dropdown to control month
+          selectYears: 15 // Creates a dropdown of 15 years to control year
+        });   
+
         helpers.getCurrentUser().then(function(response) {
           if (response !== this.state.username) {
             this.setState({ user_id: response.data._id, 
@@ -35,9 +45,18 @@ var ManagerEmployeeAll = React.createClass({
             });
           }
         }.bind(this)); 
-        this.getEmployees();
+        this.getEmployees();  
     },
 
+    componentDidUpdate: function(){
+         //Apply date picker to the Leave day field
+        $('.datepicker').pickadate({
+          selectMonths: true, // Creates a dropdown to control month
+          selectYears: 15 // Creates a dropdown of 15 years to control year
+        });   
+        
+    },
+    
     getEmployees: function() {   
         helpers.getAllEmployees(this.state.group_id).then(function(response) {
             if (response !== this.state.allEmployees) {
@@ -51,7 +70,7 @@ var ManagerEmployeeAll = React.createClass({
        this.setState({ [event.target.name]: event.target.value});
     },
 
-    handleAddForm: function(event) {
+    /*handleAddForm: function(event) {
         event.preventDefault();
         helpers.addEmployee(this.state.firstName, this.state.lastName, 
             this.state.addressOne, this.state.addressTwo, this.state.city, 
@@ -68,7 +87,7 @@ var ManagerEmployeeAll = React.createClass({
         Materialize.toast('Employee added', 3000);
         this.clearForm();
         this.getEmployees();
-    },
+    },*/
 
     handleUpdateForm: function(event) {
         event.preventDefault();
@@ -81,10 +100,10 @@ var ManagerEmployeeAll = React.createClass({
 
         Materialize.toast("Employee updated", 3000);
         this.clearForm();
-        this.getEmployees();
+        this.getEmployees();       
    },
 
-    handleRemoveForm: function(event) {
+    /*handleRemoveForm: function(event) {
         event.preventDefault();
         helpers.removeEmployee(this.state.selectedEmployee).then(function(response) {
         }.bind(this));
@@ -94,7 +113,7 @@ var ManagerEmployeeAll = React.createClass({
         Materialize.toast("Employee removed", 3000);
         this.clearForm();
         this.getEmployees();
-    },
+    },*/
 
     clickEmployee: function(event) {
         this.setState({selectedEmployee: event.target.id}, function() {
@@ -120,6 +139,7 @@ var ManagerEmployeeAll = React.createClass({
                 }
             }
         });
+        this.setState({ showEmployeeForm: true });
     },
 
     newEmployee: function() {
@@ -145,7 +165,7 @@ var ManagerEmployeeAll = React.createClass({
 
     activeButtons: function() {
         // don't allow updating or removing on empty form
-        if (this.state.selectedEmployee == "") {
+        /*if (this.state.selectedEmployee == "") {
             document.getElementById("addEmployee").className = "btn btn-large waves-effect waves-light green accent-3";
             document.getElementById("updateEmployee").className += " disabled";
             document.getElementById("removeEmployee").className += " disabled";
@@ -153,10 +173,11 @@ var ManagerEmployeeAll = React.createClass({
             document.getElementById("addEmployee").className += " disabled";
             document.getElementById("updateEmployee").className = "btn btn-large waves-effect waves-light blue accent-3";
             document.getElementById("removeEmployee").className = "btn btn-large waves-effect waves-light red accent-3";
-        }
+        }*/
     },
 
     render: function() {
+        let employeeForm= "";
         {
             if(this.state.user_type=="su"){
                 var filterd_employees = this.state.allEmployees;
@@ -167,33 +188,9 @@ var ManagerEmployeeAll = React.createClass({
             }else{
                 var filterd_employees = this.state.allEmployees.filter((employees) => (employees.team == this.state.group_id &&
                   employees.user_id != this.state.user_id ) );
-            }
-        }           
-        return (            
-            <div className="row">
-                <div className="col m3">
-                    <table className="highlight" id="allEmployees">
-                        <thead>
-                            <tr>
-                                <th data-field="name">Employees</th>
-                            </tr>
-                        </thead>
-                        <tbody>                        
-                            {filterd_employees.map(function(ManagerEmployeeAll, i) {
-                                return (
-                                    <tr key={i}>
-                                        <td className="employeeList" onClick={this.clickEmployee} id={ManagerEmployeeAll._id}>
-                                            {ManagerEmployeeAll.firstName} {ManagerEmployeeAll.lastName}
-                                        </td>
-                                    </tr>
-                                );
-                            }, this)}
-                        </tbody>
-                    </table>
-                </div>
-                <div className="col m9">
-                    <div className="row">
-                        <form className="col m12" onSubmit={this.handleAddForm}>
+            }         
+            if (this.state.showEmployeeForm){
+                employeeForm = <form className="col m12" onSubmit={this.handleAddForm} id="employeeForm">
                             <div className="row">
                                 <div className="input-field col m6 s12">
                                     <input
@@ -271,13 +268,23 @@ var ManagerEmployeeAll = React.createClass({
                                 </div>
                             </div>
                             <div className="row">
-                                <div className="input-field col m12 s12">
+                                <div className="input-field col m6 s6">
                                     <input
                                         placeholder="Email"
                                         name="email"
                                         type="email"
                                         className="validate"
                                         value={this.state.email}
+                                        onChange={this.handleUserChange}
+                                        required />
+                                </div>
+                                <div className="input-field col m6 s6">
+                                    <input
+                                        placeholder="Date of Join"
+                                        name="doj"
+                                        type="text"
+                                        className="validate datepicker"
+                                        value={this.state.doj}
                                         onChange={this.handleUserChange}
                                         required />
                                 </div>
@@ -331,11 +338,11 @@ var ManagerEmployeeAll = React.createClass({
                           </div>
 
                             <div className="row">
-                                <div className="col s4">
+                                {/*<div className="col s4">
                                     <button id="addEmployee" className="btn btn-large waves-effect waves-light green accent-3" type="submit" value="Submit">Add
                                         <i className="material-icons right">person_add</i>
                                     </button>
-                                </div>
+                                </div>*/}
                                 <div className="col s4">
                                     <a id="updateEmployee" className="btn btn-large waves-effect waves-light blue accent-3" onClick={this.handleUpdateForm}>Update
                                         <i className="material-icons right">edit</i>
@@ -347,7 +354,37 @@ var ManagerEmployeeAll = React.createClass({
                                     </a>
                                 </div>
                             </div>
-                        </form>
+                        </form>;
+            }
+            else{
+                employeeForm = "";
+            }
+        }           
+        return (            
+            <div className="row">
+                <div className="col m3">
+                    <table className="highlight" id="allEmployees">
+                        <thead>
+                            <tr>
+                                <th data-field="name">Employees</th>
+                            </tr>
+                        </thead>
+                        <tbody>                        
+                            {filterd_employees.map(function(ManagerEmployeeAll, i) {
+                                return (
+                                    <tr key={i}>
+                                        <td className="employeeList" onClick={this.clickEmployee} id={ManagerEmployeeAll._id}>
+                                            {ManagerEmployeeAll.firstName} {ManagerEmployeeAll.lastName}
+                                        </td>
+                                    </tr>
+                                );
+                            }, this)}
+                        </tbody>
+                    </table>
+                </div>
+                <div className="col m9">
+                    <div className="row">
+                        {employeeForm}
                     </div>
                 </div>
             </div>
