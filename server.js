@@ -34,7 +34,7 @@
 
   passport.deserializeUser(function(id,done) {
     User.findById(id, function (err,user) {
-      done(err,user);
+     done(err,user);
     });
   });
 
@@ -183,12 +183,27 @@
     })
   });
 
-  app.post("/login", passport.authenticate("local", {
+  app.post('/login', function(req, res, next) {
+    passport.authenticate('local', function(err, user, info) {
+      failureFlash: true // optional, see text as well
+      if (err) { return next(err) }
+      if (!user) {
+        // *** Display message without using flash option
+         return res.sendFile(path.resolve(__dirname, "public", "notauth.html"))
+        }
+      req.logIn(user, function(err) {
+        if (err) { return next(err); }
+        reRoute(req,res);
+      });
+    })(req, res, next);
+  });
+
+  /*app.post("/login", passport.authenticate("local", {
     // successRedirect: "/manager",
     failureRedirect: "/"
   }), function(req, res) {
       reRoute(req,res);
-  });
+  });*/
 
 //Functions for Auth
   function isLoggedIn(req,res,next){

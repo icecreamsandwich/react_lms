@@ -19,6 +19,8 @@ class Login extends React.Component {
       // just in case we need it
   }
     render() {
+        // Display the login messages here 
+        if(this.props.message){this.props.message}
       return (
         <div className="container">
             <div className="row" id="loginForm">
