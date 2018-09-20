@@ -67,7 +67,7 @@ var helper = {
   },
 
   //Add leave request
-  addLeave: function(userId,groupId,userName,leaveTitle,leaveBody,leaveType) {
+  addLeave: function(userId,groupId,userName,leaveTitle,leaveBody,leaveType,leaveDay) {
     return axios.post("/addLeave", {
         userId: userId,
         groupId: groupId,
@@ -75,6 +75,7 @@ var helper = {
         leaveTitle: leaveTitle,
         leaveBody: leaveBody,       
         leaveType: leaveType,       
+        leaveDay: leaveDay,       
       });
   },
 
@@ -154,7 +155,17 @@ var helper = {
     return axios.post("/addMiscs", {
         title: title,
         content: content });
-  }
+  },
+  
+    //Send email functionality
+    sendMail:function(name,email,message,maillist) {
+      return axios.post('/sendEmail', {
+        name: name,
+        email: email,
+        message: message,
+        maillist: maillist
+      });
+    },
 };
 
 module.exports = helper;

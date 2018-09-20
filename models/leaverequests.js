@@ -18,7 +18,7 @@ var LeaveRequestsSchema = new Schema({
         type: String,
         default: ""
     },
-    noOfLeaves: {
+    leaveDay: {
         type: String,
         default: ""
     },

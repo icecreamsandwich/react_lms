@@ -1,6 +1,5 @@
 var React = require("react");
 var helpers = require("../utils/helpers");
-// import DatePicker  from "react-datepicker";
 
 var ApplyLeave = React.createClass({
     getInitialState: function() {
@@ -16,6 +15,7 @@ var ApplyLeave = React.createClass({
             picture: "",
             user_id:"",
             leavetype:"",
+            leaveday:"",
         };
     },
 
@@ -31,6 +31,14 @@ var ApplyLeave = React.createClass({
             this.activeButtons();
           }
         }.bind(this));
+        //Apply date picker to the Leave day field
+         /*var elem = $('.datepicker')
+         var options = {}
+         var instance = M.Datepicker.init(elem, options);*/
+        $('.datepicker').pickadate({
+          selectMonths: true, // Creates a dropdown to control month
+          selectYears: 15 // Creates a dropdown of 15 years to control year
+        });
     },
 
     handleUserChange(event) {      
@@ -44,7 +52,8 @@ var ApplyLeave = React.createClass({
         event.preventDefault();
         helpers.addLeave(this.state.user_id, this.state.group_id, this.state.username ,
             this.state.leaveTitle, 
-            this.state.leaveBody, this.state.leavetype).then(function(response) {
+            this.state.leaveBody, this.state.leavetype,
+            this.state.leaveday).then(function(response) {
         }.bind(this));
         Materialize.toast('Leave Requested Successfully', 3000,'blue rounded');
         this.clearForm();
@@ -70,7 +79,7 @@ var ApplyLeave = React.createClass({
             <h5>Apply for Leave </h5>
                 <div className="col m9">
                     <div className="row">
-                        <form className="col m12" onSubmit={this.handleAddForm}>
+                        <form className="col m12" onSubmit={this.handleAddForm} id="applyLeaveForm">
                         <div className="row">
                                 <div className="input-field col m3 s6">
                                     <select className="browser-default" name="leavetype" value={this.state.leavetype} onChange={this.handleUserChange} required>
@@ -81,16 +90,24 @@ var ApplyLeave = React.createClass({
                                     </select>
                                 </div>
                                 <div className="row">
-                                {/*<DatePicker
-                                   selected={this.state.startDate}
-                                   onChange={this.handleChange}
-                                />*/}
                                 </div>
                             </div>
                             <div className="row">
                                 <div className="input-field col m6 s12">
                                     <input
-                                        placeholder="Leave Title"
+                                        placeholder="Day"
+                                        name="leaveday"
+                                        type="text"
+                                        className="validate datepicker"
+                                        value={this.state.leaveday}
+                                        onChange={this.handleUserChange}
+                                        required />
+                                </div>
+                            </div>
+                            <div className="row">
+                                <div className="input-field col m6 s12">
+                                    <input
+                                        placeholder="Leave Subject"
                                         name="leaveTitle"
                                         type="text"
                                         className="validate"

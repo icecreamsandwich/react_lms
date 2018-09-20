@@ -1,5 +1,6 @@
 node_modules
-public/bundle.js
 .env
-public/index.html
+public/bundle.js
 yarn.lock
+public/index.html
+db/db.js

@@ -13,9 +13,18 @@
   var employee = require("./models/employee");
   var leavedetails = require("./models/leavedetails");
 
+
 //Initialize Express
   var app = express();
   var PORT = process.env.PORT || 1010;
+
+  //NodeMailer configurations//
+  app.use(function (req, res, next) {
+   res.header("Access-Control-Allow-Origin", "*");
+   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+   next();
+  });
+  //NodeMailer configurations//
 
 //Express session
   app.use(require("express-session")({
@@ -198,6 +207,22 @@
     })(req, res, next);
   });
 
+  //change password (passport-local-mongoose)
+  app.post('/manager/reset-password', function(req, res, next){
+    passport.changePassword(req.body.oldpassword,req.body.newpassword, function(err) {
+            if (err){
+                return next(err) 
+            }
+            else {
+              if (req.body.userType === "manager" || req.body.userType === "su") {
+                res.redirect("/manager");
+              } else {
+                res.redirect("/employee");
+              }
+            }
+    }); 
+  });
+ 
   /*app.post("/login", passport.authenticate("local", {
     // successRedirect: "/manager",
     failureRedirect: "/"
