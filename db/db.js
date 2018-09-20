@@ -3,7 +3,7 @@
   mongoose.Promise = Promise;
 
 //DB
-  var databaseUri ="mongodb://localhost/schedulr";
+  var databaseUri ="mongodb://192.168.1.188/schedulr";
 
   if(process.env.MONGODB_URI) {
       mongoose.connect(process.env.MONGODB_URI);

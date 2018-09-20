@@ -16,6 +16,7 @@ var LeaveRequests = React.createClass({
             selectedLeaveRequest: [],
             leaveDetails: [],
         };
+    // this.leaveFormSubmitHandler = this.leaveFormSubmitHandler.bind(this);
     },
 
      componentDidMount: function() {
@@ -57,6 +58,28 @@ var LeaveRequests = React.createClass({
             }        
         }       
     },
+
+    leaveFormSubmitHandler: function(event) {
+            event.preventDefault();            
+            var leaveTypeStr = "";  
+            var filterd_leave_details = this.state.leaveDetails.filter((leaves) => 
+                (leaves.user_id == this.state.selectedLeaveRequest.emp_id));
+                filterd_leave_details.map(function(leave_details, i){
+                     var CL = leave_details.CL;
+                     var SL = leave_details.SL;
+                     var AL = leave_details.AL;
+                     if (CL == 0 && SL != 0 && AL != 0 )leaveTypeStr = "SL";
+                     else if(CL == 0 && SL == 0 && AL != 0 )leaveTypeStr = "AL";
+                     else if(CL == 0 && SL == 0 && AL == 0 )leaveTypeStr = "LOP";
+                });
+                if(!leaveTypeStr)leaveTypeStr = this.state.selectedLeaveRequest.leaveType;
+
+            helpers.approveLeave(this.state.selectedLeaveRequest._id,this.state.selectedLeaveRequest.emp_id,
+                leaveTypeStr).then(function(response) {
+            }.bind(this));
+            Materialize.toast('Leave Approved Successfully', 3000,'green rounded');
+            this.setState({ showForm: false });
+        },
 
     render: function() {
         return (
@@ -102,7 +125,7 @@ var LeaveRequests = React.createClass({
                 </div>
                 {/*Render the approval form here */}
                 { this.state.showForm ? <LeaveForm leaveData={this.state.selectedLeaveRequest} 
-                    leaveDetails={this.state.leaveDetails}/> : null }
+                    leaveDetails={this.state.leaveDetails} leaveFormSubmitHandler={this.leaveFormSubmitHandler} /> : null }
             </div>
         );
     }
@@ -115,40 +138,13 @@ var LeaveForm = React.createClass({
             leaveTypeStr : this.props.leaveData.leaveType,
         };
     },
-    
-    getDefaultProps: function() {
-        return {
-          leaveTypeStr: ""
-        };
-    },
-    leaveFormSubmitHandler: function(event) {
-        event.preventDefault();
-        var leaveTypeStr = "";  
-        var filterd_leave_details = this.props.leaveDetails.filter((leaves) => 
-            (leaves.user_id == this.props.leaveData.emp_id));
-            filterd_leave_details.map(function(leave_details, i){
-                 var CL = leave_details.CL;
-                 var SL = leave_details.SL;
-                 var AL = leave_details.AL;
-                 if (CL == 0 && SL != 0 && AL != 0 )leaveTypeStr = "SL";
-                 else if(CL == 0 && SL == 0 && AL != 0 )leaveTypeStr = "AL";
-                 else if(CL == 0 && SL == 0 && AL == 0 )leaveTypeStr = "LOP";
-                 else leaveTypeStr = this.props.leaveData.leaveType;
-            });
-
-        helpers.approveLeave(this.props.leaveData._id,this.props.leaveData.emp_id,
-            leaveTypeStr).then(function(response) {
-        }.bind(this));
-        Materialize.toast('Leave Approved Successfully', 3000,'green rounded');
-    },
-
                     render: function() {
                         return (
                              <div className="col m9">
                              <br/><br/><br/>
                              <h5>Leave Application</h5>
                                 <div className="row">
-                                    <form className="col m12" onSubmit={this.leaveFormSubmitHandler}>
+                                    <form className="col m12" onSubmit={this.props.leaveFormSubmitHandler} id="leaveForm">
                                         <div className="row">
                                             <div className="input-field col m6 s12">
                                                 <input

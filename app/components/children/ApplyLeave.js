@@ -52,7 +52,8 @@ var ApplyLeave = React.createClass({
         event.preventDefault();
         helpers.addLeave(this.state.user_id, this.state.group_id, this.state.username ,
             this.state.leaveTitle, 
-            this.state.leaveBody, this.state.leavetype).then(function(response) {
+            this.state.leaveBody, this.state.leavetype,
+            this.state.leaveday).then(function(response) {
         }.bind(this));
         Materialize.toast('Leave Requested Successfully', 3000,'blue rounded');
         this.clearForm();
@@ -78,7 +79,7 @@ var ApplyLeave = React.createClass({
             <h5>Apply for Leave </h5>
                 <div className="col m9">
                     <div className="row">
-                        <form className="col m12" onSubmit={this.handleAddForm}>
+                        <form className="col m12" onSubmit={this.handleAddForm} id="applyLeaveForm">
                         <div className="row">
                                 <div className="input-field col m3 s6">
                                     <select className="browser-default" name="leavetype" value={this.state.leavetype} onChange={this.handleUserChange} required>

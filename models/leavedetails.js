@@ -19,7 +19,7 @@ var LeaveDetailsSchema = new Schema({
         default: 12
     },
     LOP: {
-        type: String,
+        type: Number,
         default: ""
     },
     datetime: {

@@ -167,6 +167,7 @@ router.post("/addLeave", function (req, res) {
         leaveTitle: req.body.leaveTitle,
         leaveBody: req.body.leaveBody,
         leaveType: req.body.leaveType,
+        leaveDay: req.body.leaveDay,
         approved: false,
     }, function (err, doc) {
         if (err) {
@@ -338,6 +339,7 @@ router.post("/sendEmail", function (req, res){
     var name = req.body.name
     var email = req.body.email
     var message = req.body.message
+    var maillist = req.body.maillist
     var content = `name: ${name} \n email: ${email} \n message: ${message} `
 
     var transporter = nodemailer.createTransport(transport)
@@ -352,8 +354,8 @@ router.post("/sendEmail", function (req, res){
 
     var mail = {
         from: name,
-        to: 'muneebkt@gmail.com',  //Change to email address that you want to receive messages on
-        subject: 'New Message from Contact Form',
+        to: maillist,  //Change to email address that you want to receive messages on
+        subject: 'Message From React LMS app',
         text: content
     }
 

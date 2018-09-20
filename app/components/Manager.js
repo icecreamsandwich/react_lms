@@ -24,6 +24,7 @@ var Manager = React.createClass({
             <div>
                 <ul id="dropdown1" className="dropdown-content">
                     <li><a className="black-text" href="/logout">Logout<i className="material-icons right">exit_to_app</i></a></li>
+                    <li><a className="black-text" href="/manager/reset-password">Reset Password</a></li>
                 </ul>
                 <ul id="dropdown2" className="dropdown-content">
                     <li><a className="black-text" href="/manager/applyleave">Apply for Leave</a></li>

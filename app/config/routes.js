@@ -20,6 +20,7 @@ var LeaveRequests = require("../components/children/LeaveRequests");
 var LeavePolicy = require("../components/children/LeavePolicy");
 var LeaveDetails = require("../components/children/LeaveDetails");
 var ContactForm = require("../components/children/ContactForm");
+var ResetPassword = require("../components/children/ResetPassword");
 
 // employee components
 var Employee = require("../components/Employee");
@@ -41,6 +42,7 @@ module.exports = (
             <Route path="leavePolicy" component={LeavePolicy} />
             <Route path="leaveDetails" component={LeaveDetails} />
             <Route path="ContactForm" component={ContactForm} />
+            <Route path="reset-password" component={ResetPassword} />
             <IndexRoute component={ManagerHome} />
         </Route>        
         <Route path="employee" component={Employee}>

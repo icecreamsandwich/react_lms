@@ -51,3 +51,10 @@
 	margin-left: 15px;
 	margin-bottom: -10px;
 }
+#applyLeaveForm,#employeeForm,#leaveForm{
+    box-sizing: border-box;
+    border: 2px solid #ccc;
+    border-radius: 4px;
+    background-color: #f8f8f8;
+    margin-top: 20px;
+}
