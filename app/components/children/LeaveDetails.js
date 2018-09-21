@@ -30,7 +30,18 @@ var LeaveDetails = React.createClass({
 
     componentDidUpdate() {
        //fetch details of the leaves of the current user from here 
-       var user_id = this.state.user_id;
+       var leaveTypeStr = "";  
+       var filterdleaves = this.state.leaveDetails.filter((leaves) => (leaves.user_id == this.state.user_id ));
+        filterdleaves.map(function(leave_details, i){
+             var CL = leave_details.CL;
+             var SL = leave_details.SL;
+             var AL = leave_details.AL;
+             if (CL == 0)leaveTypeStr = "Casual Leaves";
+             else if(SL == 0)leaveTypeStr = "Sick Leaves";
+             else if(AL == 0)leaveTypeStr = "Annual Leaves";
+        });
+         if(leaveTypeStr) Materialize.toast('Your '+leaveTypeStr+' have been exhausted. Please take care while taking leaves',
+          10000,'red rounded');
     },
 
 

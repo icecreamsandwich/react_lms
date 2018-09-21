@@ -1,5 +1,7 @@
 var React = require("react");
+var ReactDOM = require('react-dom');
 var helpers = require("../utils/helpers");
+var SimpleReactFileUpload =  require("./SimpleReactFileUpload");
 
 var ManagerEmployeeAll = React.createClass({
     getInitialState: function() {
@@ -29,13 +31,6 @@ var ManagerEmployeeAll = React.createClass({
     },
 
     componentDidMount: function() {
-
-         //Apply date picker to the Leave day field
-        $('.datepicker').pickadate({
-          selectMonths: true, // Creates a dropdown to control month
-          selectYears: 15 // Creates a dropdown of 15 years to control year
-        });   
-
         helpers.getCurrentUser().then(function(response) {
           if (response !== this.state.username) {
             this.setState({ user_id: response.data._id, 
@@ -70,29 +65,10 @@ var ManagerEmployeeAll = React.createClass({
        this.setState({ [event.target.name]: event.target.value});
     },
 
-    /*handleAddForm: function(event) {
-        event.preventDefault();
-        helpers.addEmployee(this.state.firstName, this.state.lastName, 
-            this.state.addressOne, this.state.addressTwo, this.state.city, 
-            this.state.state, this.state.zip, this.state.email, 
-            this.state.phone, this.state.phoneType,
-            this.state.designation,this.state.team,this.state.user_id).then(function(response) {
-            this.state.emp_user_id = response.data.user_id;
-
-            helpers.addEmpSchedule(this.state.emp_id, this.state.firstName, this.state.lastName).then(function(response) {
-                this.clearStates();
-            }.bind(this));
-
-        }.bind(this));
-        Materialize.toast('Employee added', 3000);
-        this.clearForm();
-        this.getEmployees();
-    },*/
-
     handleUpdateForm: function(event) {
         event.preventDefault();
         helpers.updateEmployee(this.state.selectedEmployee, this.state.firstName, this.state.lastName, this.state.addressOne, this.state.addressTwo, this.state.city, this.state.state, this.state.zip, this.state.email, this.state.phone, this.state.phoneType,
-             this.state.designation,this.state.team).then(function(response) {
+             this.state.designation,this.state.team,this.state.doj).then(function(response) {
         }.bind(this));
 
         helpers.updateEmpTeam(this.state.emp_user_id, this.state.team, this.state.designation).then(function(response) {
@@ -103,17 +79,6 @@ var ManagerEmployeeAll = React.createClass({
         this.getEmployees();       
    },
 
-    /*handleRemoveForm: function(event) {
-        event.preventDefault();
-        helpers.removeEmployee(this.state.selectedEmployee).then(function(response) {
-        }.bind(this));
-        helpers.removeEmpSchedule(this.state.emp_id).then(function(response) {
-            this.clearStates();
-        }.bind(this));
-        Materialize.toast("Employee removed", 3000);
-        this.clearForm();
-        this.getEmployees();
-    },*/
 
     clickEmployee: function(event) {
         this.setState({selectedEmployee: event.target.id}, function() {
@@ -132,6 +97,7 @@ var ManagerEmployeeAll = React.createClass({
                         phoneType: this.state.allEmployees[i].phoneType,
                         designation: this.state.allEmployees[i].designation,
                         team: this.state.allEmployees[i].team,
+                        doj: this.state.allEmployees[i].doj,
                         emp_user_id: this.state.allEmployees[i].user_id,
                         emp_id: this.state.selectedEmployee
                     });
@@ -336,13 +302,13 @@ var ManagerEmployeeAll = React.createClass({
                                 </select>
                               </div>
                           </div>
+                          <div className="row">
+                            <div className="input-field col m4 s4">
+                                <SimpleReactFileUpload firstName={this.state.firstName} />
+                            </div>
+                          </div>
 
                             <div className="row">
-                                {/*<div className="col s4">
-                                    <button id="addEmployee" className="btn btn-large waves-effect waves-light green accent-3" type="submit" value="Submit">Add
-                                        <i className="material-icons right">person_add</i>
-                                    </button>
-                                </div>*/}
                                 <div className="col s4">
                                     <a id="updateEmployee" className="btn btn-large waves-effect waves-light blue accent-3" onClick={this.handleUpdateForm}>Update
                                         <i className="material-icons right">edit</i>

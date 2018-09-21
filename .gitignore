@@ -3,3 +3,5 @@ node_modules
 public/bundle.js
 public/index.html
 db/db.js
+mail_config/config.js
+uploads

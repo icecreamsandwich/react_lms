@@ -3,7 +3,27 @@ var router = express.Router();
 var db = require("../db/db.js");
 var path = require("path");
 var nodemailer = require('nodemailer');
+var fs  = require('fs');
+//file uploading using multer
+var multer = require('multer');
 
+// this is important because later we'll need to access file path
+const storage = multer.diskStorage({
+  // destination: '../public/protected/',
+  destination: (req, file, cb) => {
+        /*
+          Files will be saved in the 'uploads' directory. Make
+          sure this directory already exists!
+        */
+        cb(null, './uploads');
+  },
+  filename(req, file, cb) {
+    cb(null, `${new Date()}-${file.originalname}`);
+  },
+});
+
+const upload = multer({ storage });
+// var upload = multer({ dest: '../public/protected/'});
 
 var employee = require("../models/employee");
 var EmployeeSchedule = require("../models/employeeSchedule");
@@ -12,6 +32,7 @@ var misc = require("../models/misc");
 var Leave = require("../models/leaverequests");
 var LeaveDetails = require("../models/leavedetails");
 var User = require("../models/user");
+
 //NodeMailer configurations//
 const creds = require('../mail_config/config');
 
@@ -208,6 +229,7 @@ router.put("/updateEmployee/:id", function (req, res) {
         phoneType: req.body.phoneType,
         designation: req.body.designation,
         team: req.body.team,
+        doj: req.body.doj,
         active: req.body.active
     }, function (err) {
         if (err) {
@@ -372,4 +394,9 @@ router.post("/sendEmail", function (req, res){
     })
 });
 
+//File uploading 
+router.post("/fileUpload",upload.single('selectedFile'), function (req, res){
+     res.send('File uploaded Successfully');
+});
+  
 module.exports = router;

@@ -5,6 +5,7 @@
   var passport = require("passport");
   var LocalStrategy= require("passport-local");
   var passportLocalMongoose = require("passport-local-mongoose");
+  var multer = require("multer");
   var GoogleStrategy = require("passport-google-oauth").OAuth2Strategy;
   var LinkedInStrategy = require("passport-linkedin-oauth2").Strategy;
   var path = require("path");
