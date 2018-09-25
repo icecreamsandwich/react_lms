@@ -44,8 +44,6 @@ module.exports = (
             <Route path="leaveDetails" component={LeaveDetails} />
             <Route path="ContactForm" component={ContactForm} />
             <Route path="reset-password" component={ResetPassword} />
-            <Route path="fileUpload" component={SimpleReactFileUpload} />
-            <Route path="SimpleReactFileUpload" component={SimpleReactFileUpload} />
             <IndexRoute component={ManagerHome} />
         </Route>        
         <Route path="employee" component={Employee}>

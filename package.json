@@ -21,6 +21,7 @@
   "homepage": "https://github.com/clsavino/react-shift-scheduler#readme",
   "dependencies": {
     "axios": "^0.15.3",
+    "bcrypt-nodejs": "0.0.3",
     "bluebird": "^3.4.6",
     "body-parser": "^1.15.2",
     "dotenv": "^4.0.0",

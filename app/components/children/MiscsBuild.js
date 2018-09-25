@@ -39,7 +39,7 @@ var MiscsBuild = React.createClass({
             <div className="card-panel">
                 <div className="row">
                     <div className="col s12">
-                        <h5>Create a misc data</h5>
+                        <h5>Create a Company News</h5>
                     </div>
                 </div>
                 <form onSubmit={this.addMiscs}>
