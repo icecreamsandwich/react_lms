@@ -42,7 +42,7 @@ var EmployeeSchema = new Schema({
         type: String
     },
     doj: {
-        type: String,
+        type: Date,
         default: "",
     },
     active: {

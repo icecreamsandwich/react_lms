@@ -32,22 +32,31 @@ var ApplyLeave = React.createClass({
           }
         }.bind(this));
         //Apply date picker to the Leave day field
-         /*var elem = $('.datepicker')
-         var options = {}
-         var instance = M.Datepicker.init(elem, options);*/
+        var date = new Date();
         $('.datepicker').pickadate({
           selectMonths: true, // Creates a dropdown to control month
-          selectYears: 15 // Creates a dropdown of 15 years to control year
+          selectYears: 15 ,// Creates a dropdown of 15 years to control year
+          format: 'yyyy-mm-dd',
+          startDate: date
         });
     },
 
-    handleUserChange(event) {      
+    handleTitleChange(event) {      
        this.setState({ [event.target.name]: event.target.value});
-       this.setState({
-         // startDate: date
-       });
+    },
+    handleBodyChange(event) {      
+       this.setState({ [event.target.name]: event.target.value});
+    },
+    handleLeaveTypeChange(event) {      
+       this.setState({ [event.target.name]: event.target.value});
     },
 
+    handleLeaveDayChange(event) {
+        console.log(date);
+        this.setState({
+          leaveday: event.target.value
+        })
+    },
     handleAddForm: function(event) {
         event.preventDefault();
         helpers.addLeave(this.state.user_id, this.state.group_id, this.state.username ,
@@ -82,7 +91,7 @@ var ApplyLeave = React.createClass({
                         <form className="col m12" onSubmit={this.handleAddForm} id="applyLeaveForm">
                         <div className="row">
                                 <div className="input-field col m3 s6">
-                                    <select className="browser-default" name="leavetype" value={this.state.leavetype} onChange={this.handleUserChange} required>
+                                    <select className="browser-default" name="leavetype" value={this.state.leavetype} onChange={this.handleLeaveTypeChange} required>
                                         <option value="" disabled>Leave Type</option>
                                         <option value="CL">Casual Leave</option>
                                         <option value="SL">Sick Leave</option>
@@ -100,7 +109,7 @@ var ApplyLeave = React.createClass({
                                         type="text"
                                         className="validate datepicker"
                                         value={this.state.leaveday}
-                                        onChange={this.handleUserChange}
+                                        onChange={this.handleLeaveDayChange}                                    
                                         required />
                                 </div>
                             </div>
@@ -112,7 +121,7 @@ var ApplyLeave = React.createClass({
                                         type="text"
                                         className="validate"
                                         value={this.state.leaveTitle}
-                                        onChange={this.handleUserChange}
+                                        onChange={this.handleTitleChange}
                                         required />
                                 </div>
                             </div>
@@ -124,7 +133,7 @@ var ApplyLeave = React.createClass({
                                         type="text"
                                         className="validate"
                                         value={this.state.leaveBody}
-                                        onChange={this.handleUserChange}
+                                        onChange={this.handleBodyChange}
                                         required />
                                 </div>
                             </div>

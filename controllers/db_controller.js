@@ -12,13 +12,15 @@ const storage = multer.diskStorage({
   // destination: '../public/protected/',
   destination: (req, file, cb) => {
         /*
-          Files will be saved in the 'uploads' directory. Make
+          Files will be saved in the 'public/protected/profile_pics' directory. Make
           sure this directory already exists!
         */
-        cb(null, './uploads');
+        cb(null, './public/protected/profile_pics');
   },
   filename(req, file, cb) {
-    cb(null, `${new Date()}-${file.originalname}`);
+    var username = req.body.firstName;
+    console.log(req.params.firstName);
+    cb(null, `${file.originalname}`); //-${new Date()}
   },
 });
 
@@ -204,7 +206,7 @@ router.post("/addLeave", function (req, res) {
 
 //Getting All Leave Requests from the database
 router.get("/getALLLeaveRequests", function (req, res) {
-    Leave.find().exec(function (err, doc) { //{"approved": false}
+    Leave.find({"approved": false}).exec(function (err, doc) {
         if (err) {
             console.log(err);
         }

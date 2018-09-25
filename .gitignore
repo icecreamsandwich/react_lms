@@ -5,3 +5,4 @@ public/index.html
 db/db.js
 mail_config/config.js
 uploads
+public/protected

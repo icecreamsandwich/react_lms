@@ -11,8 +11,6 @@ var UserSchema = new mongoose.Schema({
 	userType: String,
 	picture: String,
 	password: String,
-	salt: String,
-	hash: String,
 	groupId: String,
 	designationId: String,
 	active: {
@@ -23,7 +21,7 @@ var UserSchema = new mongoose.Schema({
 
 UserSchema.plugin(passportLocalMongoose);
 
-UserSchema.methods.setPassword = function (password, cb) {
+/*UserSchema.methods.setPassword = function (password, cb) {
     if (!password) {
         return cb(new BadRequestError(options.missingPasswordError));
     }
@@ -37,7 +35,7 @@ UserSchema.methods.setPassword = function (password, cb) {
 
         var salt = buf.toString('hex');
 
-        crypto.pbkdf2(password, salt, 10000, 512, 'sha', function(err, hashRaw) {
+        crypto.pbkdf2(password, salt, 10000, 16,'sha1', function(err, hashRaw) { //crypto.pbkdf2(password, salt, 10000, 512, 'sha', function(err, hashRaw) {
             if (err) {
                 return cb(err);
             }
@@ -49,5 +47,5 @@ UserSchema.methods.setPassword = function (password, cb) {
         });
     });
 };
-
+*/
 module.exports = mongoose.model("User", UserSchema);

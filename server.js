@@ -9,7 +9,6 @@
   //for password hash generation 
   var crypto = require('crypto');
   var bcrypt   = require('bcrypt-nodejs');
-  SALT_WORK_FACTOR = 16.5;
   var GoogleStrategy = require("passport-google-oauth").OAuth2Strategy;
   var LinkedInStrategy = require("passport-linkedin-oauth2").Strategy;
   var path = require("path");
@@ -229,7 +228,8 @@
     if (sanitizedUser){
         sanitizedUser.setPassword(newpassword, function(){
             sanitizedUser.save();
-            res.status(200).json({message: 'password reset successful'});
+            // res.status(200).json({message: 'password reset successful'});
+            res.redirect("/manager/reset-password");
         });
     } else {
         res.status(500).json({message: 'This user does not exist'});
@@ -238,79 +238,6 @@
         console.error(err);
     })
     
-     // User.setPassword(newpassword);
-
-     /*passport.authenticate('local', function(err, user, info) {
-      failureFlash: true // optional, see text as well
-      if (err) { return next(err) }
-      if (!user) {
-        // *** Display message without using flash option
-         return res.sendFile(path.resolve(__dirname, "public", "notauth.html"))
-      }
-      User.setPassword(newpassword);
-    })(req, res, next);*/
-
-
-     
-/*
-   bcrypt.genSalt(SALT_WORK_FACTOR, function(err, salt) {
-        if (err) return next(err);
-         console.log('salt is ' + salt);
-         storesalt = salt; 
-        // hash the password using our new salt
-        bcrypt.hash(newpassword, salt,null, function(err, hash) {
-            if (err) return next(err);
-            console.log('hash of the password is ' + hash);
-            storehash = hash;                        
-        });
-        console.log(storehash+'========'+storesalt);
-        return false;
-        //change the user salt and hash
-        User.findOneAndUpdate({"_id": userid}, {$set:{"password":newpassword,"salt":storesalt,"hash":storehash}}, {new: true}, function(err, doc){
-        if(err){
-            console.log("Something wrong when updating data!");
-        }
-        res.redirect('/manager/reset-password');
-        console.log(doc);
-        });
-    });*/
-
- // return false;
-        // generate a salt
-  /* bcrypt.genSalt(SALT_WORK_FACTOR, function(err, salt) {
-        if (err) return next(err);
-
-        // hash the password using our new salt
-        bcrypt.hash(newpassword, salt,null, function(err, hash) {
-            if (err) return next(err);
-
-            // override the cleartext password with the hashed one
-            // return (salt+" "+hash)
-             var salt  =salt;
-             var hash = hash
-            // next();
-        });
-    });*/
-// //Splitting it with space as the separator
-// var saltArr = saltAndHash.split(" ");
-
-// //Then read the values from the array where 0 is the first
-// var salt = saltArr[0];
-// var hash = saltArr[1];
-
-  // const User = new User();
-    //generate hash and salt from the password
-    // User.setPassword(newpassword);
-   /* //Update the user password
-    user.save()
-    .then((user) => {
-      res.redirect('/manager/reset-password');
-    })
-    .catch((err) => {
-      res.redirect('/');
-    });*/
-
-
   });
  
   /*app.post("/login", passport.authenticate("local", {

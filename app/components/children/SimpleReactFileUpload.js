@@ -16,7 +16,7 @@ class SimpleReactFileUpload extends React.Component {
 
   onFormSubmit(e){
       e.preventDefault();
-      const { description, selectedFile } = this.state;
+      const { description, selectedFile, firstName } = this.state;
       let formData = new FormData();
 
       formData.append('description', description);
