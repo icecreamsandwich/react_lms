@@ -48,7 +48,7 @@ var Employee = React.createClass({
                           <ul className="right hide-on-med-and-down">
                              <li><a><Clock ></Clock></a></li>
                             <li><a className="dropdown-button black-text" href="#" data-activates="dropdown2" data-beloworigin="true" data-hover="true">Leave Management</a></li>
-                            <li><a className="dropdown-button black-text" href="#" data-activates="dropdown1" data-beloworigin="true" data-hover="true">{this.state.username}<img className="circle circle-small" src={this.state.picture}/></a></li>                            
+                            <li><a className="dropdown-button black-text" href="#" data-activates="dropdown1" data-beloworigin="true" data-hover="true">{this.state.username}<img className="circle circle-small" src={"./protected/profile_pics/"+this.state.picture}/></a></li>                            
                         </ul>
                         <ul id="slide-out" className="side-nav">
                             <li>

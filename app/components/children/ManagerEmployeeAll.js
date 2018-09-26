@@ -27,8 +27,7 @@ var ManagerEmployeeAll = React.createClass({
             doj: "",
             showEmployeeForm : false,
             employeeForm :"",
-            pickedDate :"",
-            selectedFile :""
+            selectedFile : ""
         };
     },
 
@@ -38,7 +37,8 @@ var ManagerEmployeeAll = React.createClass({
             this.setState({ user_id: response.data._id, 
                 group_id: response.data.groupId,
                 design_id: response.data.designationId,
-                user_type: response.data.userType
+                user_type: response.data.userType,
+                picture: response.data.picture, 
             });
           }
         }.bind(this)); 
@@ -49,9 +49,10 @@ var ManagerEmployeeAll = React.createClass({
          //Apply date picker to the Leave day field
         $('.datepicker').pickadate({
           selectMonths: true, // Creates a dropdown to control month
-          selectYears: 15,
+          selectYears: 15 ,// Creates a dropdown of 15 years to control year
           format : "yyyy-mm-dd"
         });   
+        
     },
     
     getEmployees: function() {   
@@ -66,19 +67,22 @@ var ManagerEmployeeAll = React.createClass({
     handleUserChange(event) {
        this.setState({ [event.target.name]: event.target.value});
     },
-    
+
     handleUpdateForm: function(event) {
         event.preventDefault();
+        //get the selected filename 
+        var profilePic = document.getElementById("fileInput").files[0].name;
         var pickedDate = $(".datepicker").val();
+        
         helpers.updateEmployee(this.state.selectedEmployee, this.state.firstName, 
             this.state.lastName, this.state.addressOne, this.state.addressTwo, 
             this.state.city, this.state.state, this.state.zip, this.state.email, 
             this.state.phone, this.state.phoneType,
-             this.state.designation,this.state.team, pickedDate, this.state.selectedFile).then(function(response) {
+             this.state.designation,this.state.team, pickedDate, profilePic).then(function(response) {
         }.bind(this));
 
         helpers.updateEmpTeam(this.state.emp_user_id, this.state.team, 
-            this.state.designation, this.state.selectedFile).then(function(response) {
+            this.state.designation, profilePic).then(function(response) {
         }.bind(this));
 
         Materialize.toast("Employee updated", 3000);
@@ -105,6 +109,7 @@ var ManagerEmployeeAll = React.createClass({
                         designation: this.state.allEmployees[i].designation,
                         team: this.state.allEmployees[i].team,
                         doj: this.state.allEmployees[i].doj,
+                        profile_pic: this.state.allEmployees[i].profile_pic,
                         emp_user_id: this.state.allEmployees[i].user_id,
                         emp_id: this.state.selectedEmployee
                     });
@@ -258,7 +263,7 @@ var ManagerEmployeeAll = React.createClass({
                                         type="text"
                                         className="validate datepicker"
                                         value={this.state.doj}
-                                        onChange={this.handleDatePickerChange}
+                                        onChange={this.handleUserChange}
                                         required />
                                 </div>
                             </div>

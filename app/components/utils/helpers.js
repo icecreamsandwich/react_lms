@@ -2,8 +2,8 @@ var axios = require("axios");
 
 var helper = {
 
-  getAllEmployeesFilter: function(groupId) {
-    return axios.get("/getAllEmployeesFilter/"+ groupId);
+  getCurrentEmployeeDetails: function(empId) {
+    return axios.get("/getCurrentEmployeeDetails/"+ empId);
   },
 
   getAllEmployees: function(groupId) {
@@ -127,10 +127,11 @@ var helper = {
   },
 
   //Update employee's group id to user schema
-  updateEmpTeam: function(user_id, team_id, design_id)  {
+  updateEmpTeam: function(user_id, team_id, design_id, profilePic)  {
     return axios.put("/updateEmpTeam/" + user_id, {
         groupId: team_id,
         designationId: design_id,
+        profilePic: profilePic,
         active: 1
        });
   },
