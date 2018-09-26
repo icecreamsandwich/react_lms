@@ -167,6 +167,13 @@ var helper = {
         maillist: maillist
       });
     },
+
+    //Upload image
+   /* fileUpload:function(formData,config) {
+      return axios.post('/fileUpload', {
+        fd: formData,
+      },config);
+    },*/
 };
 
 module.exports = helper;

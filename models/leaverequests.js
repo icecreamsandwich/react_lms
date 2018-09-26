@@ -19,8 +19,8 @@ var LeaveRequestsSchema = new Schema({
         default: ""
     },
     leaveDay: {
-        type: String,
-        default: ""
+        type: Date,
+        default: "",
     },
     leaveTitle: {
         type: String,

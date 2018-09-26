@@ -5,6 +5,10 @@
   var passport = require("passport");
   var LocalStrategy= require("passport-local");
   var passportLocalMongoose = require("passport-local-mongoose");
+  var multer = require("multer");
+  //for password hash generation 
+  var crypto = require('crypto');
+  var bcrypt   = require('bcrypt-nodejs');
   var GoogleStrategy = require("passport-google-oauth").OAuth2Strategy;
   var LinkedInStrategy = require("passport-linkedin-oauth2").Strategy;
   var path = require("path");
@@ -209,18 +213,30 @@
 
   //change password (passport-local-mongoose)
   app.post('/manager/reset-password', function(req, res, next){
-    passportLocalMongoose.changePassword(req.body.oldpassword,req.body.newpassword, function(err) {
-            if (err){
-                return next(err) 
-            }
-            else {
-              if (req.body.userType === "manager" || req.body.userType === "su") {
-                res.redirect("/manager");
-              } else {
-                res.redirect("/employee");
-              }
-            }
-    }); 
+    var userid = req.body.userid;
+    var oldpassword = req.body.oldpassword;
+    var newpassword = req.body.newpassword;
+    var confirmpassword = req.body.confirmpassword;
+    var storehash;
+    var storesalt;
+
+    if (newpassword !== confirmpassword) {
+        throw new Error('password and confirm password do not match');
+     }
+
+    User.findById(userid).then(function(sanitizedUser){
+    if (sanitizedUser){
+        sanitizedUser.setPassword(newpassword, function(){
+            sanitizedUser.save();
+            // res.status(200).json({message: 'password reset successful'});
+            res.redirect("/manager/reset-password");
+        });
+    } else {
+        res.status(500).json({message: 'This user does not exist'});
+    }
+    },function(err){
+        console.error(err);
+    })
   });
  
   /*app.post("/login", passport.authenticate("local", {

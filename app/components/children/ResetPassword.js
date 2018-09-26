@@ -5,6 +5,7 @@ class ResetPassword extends React.Component {
   constructor(props){
     super(props);
     this.state = {
+      email: "",
       oldpassword: "",
       newpassword: "",
       confirmpassword: "",
@@ -18,7 +19,8 @@ componentDidMount() {
     helpers.getCurrentUser().then(function(response) {
       if (response !== this.state.username) {
         this.setState({ 
-            usertype: response.data.userType
+            usertype: response.data.userType,
+            userid: response.data._id,
         });
       }
     }.bind(this));
@@ -30,7 +32,12 @@ componentDidMount() {
 
   handleLogin(event) {
       // just in case we need it
-      // event.preventDefault();
+       if(this.state.newpassword !== this.state.confirmpassword){
+            Materialize.toast('Passwords do not match', 5000,'red rounded');
+            event.preventDefault();
+            return false ;
+        }
+       Materialize.toast('Passwod Successfully Reset', 5000,'green rounded');
   }
 
 
@@ -84,6 +91,18 @@ componentDidMount() {
                             </div>
 
                              <div className="row">
+                                <div className="col s12">
+                                    <input
+                                        placeholder="userId"
+                                        type="hidden"
+                                        className="validate"
+                                        value={this.state.userid}
+                                        name="userid"
+                                        onChange={this.handleUserChange}
+                                        required />
+                                </div>
+                            </div>
+                            <div className="row">
                                 <div className="col s12">
                                     <input
                                         placeholder="userType"

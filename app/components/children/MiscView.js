@@ -6,7 +6,7 @@ var MiscView = React.createClass({
             <div className="card-panel">
                 <div className="row">
                     <div className="col s12">
-                        <h5>Miscellanious data</h5>
+                        <h5>Latest Company News</h5>
                          {this.props.miscs.map(misc => {
                             return ( <div key={misc.title}>
                                 <p>{misc.title}</p>

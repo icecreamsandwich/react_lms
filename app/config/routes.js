@@ -21,6 +21,7 @@ var LeavePolicy = require("../components/children/LeavePolicy");
 var LeaveDetails = require("../components/children/LeaveDetails");
 var ContactForm = require("../components/children/ContactForm");
 var ResetPassword = require("../components/children/ResetPassword");
+var SimpleReactFileUpload = require("../components/children/SimpleReactFileUpload");
 
 // employee components
 var Employee = require("../components/Employee");

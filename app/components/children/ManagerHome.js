@@ -48,7 +48,7 @@ var ManagerHome = React.createClass({
     render: function() {
         return (
             <div>
-                <ScheduleView />
+                {/*<ScheduleView />*/}
                 <div className="row">
                     <div className="col m6">
                         <MiscView miscs={this.state.allMiscs}/>

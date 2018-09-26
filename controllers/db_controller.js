@@ -3,7 +3,29 @@ var router = express.Router();
 var db = require("../db/db.js");
 var path = require("path");
 var nodemailer = require('nodemailer');
+var fs  = require('fs');
+//file uploading using multer
+var multer = require('multer');
 
+// this is important because later we'll need to access file path
+const storage = multer.diskStorage({
+  // destination: '../public/protected/',
+  destination: (req, file, cb) => {
+        /*
+          Files will be saved in the 'public/protected/profile_pics' directory. Make
+          sure this directory already exists!
+        */
+        cb(null, './public/protected/profile_pics');
+  },
+  filename(req, file, cb) {
+    var username = req.body.firstName;
+    console.log(req.params.firstName);
+    cb(null, `${file.originalname}`); //-${new Date()}
+  },
+});
+
+const upload = multer({ storage });
+// var upload = multer({ dest: '../public/protected/'});
 
 var employee = require("../models/employee");
 var EmployeeSchedule = require("../models/employeeSchedule");
@@ -12,6 +34,7 @@ var misc = require("../models/misc");
 var Leave = require("../models/leaverequests");
 var LeaveDetails = require("../models/leavedetails");
 var User = require("../models/user");
+
 //NodeMailer configurations//
 const creds = require('../mail_config/config');
 
@@ -183,7 +206,7 @@ router.post("/addLeave", function (req, res) {
 
 //Getting All Leave Requests from the database
 router.get("/getALLLeaveRequests", function (req, res) {
-    Leave.find().exec(function (err, doc) { //{"approved": false}
+    Leave.find({"approved": false}).exec(function (err, doc) {
         if (err) {
             console.log(err);
         }
@@ -373,4 +396,9 @@ router.post("/sendEmail", function (req, res){
     })
 });
 
+//File uploading 
+router.post("/fileUpload",upload.single('selectedFile'), function (req, res){
+     res.send('File uploaded Successfully');
+});
+  
 module.exports = router;
