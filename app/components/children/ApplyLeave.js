@@ -15,7 +15,7 @@ var ApplyLeave = React.createClass({
             picture: "",
             user_id:"",
             leavetype:"",
-            leaveday:"",
+       /*     leaveday:"",*/
         };
     },
 
@@ -31,38 +31,24 @@ var ApplyLeave = React.createClass({
             this.activeButtons();
           }
         }.bind(this));
-        //Apply date picker to the Leave day field
-        var date = new Date();
         $('.datepicker').pickadate({
           selectMonths: true, // Creates a dropdown to control month
           selectYears: 15 ,// Creates a dropdown of 15 years to control year
           format: 'yyyy-mm-dd',
-          startDate: date
         });
     },
 
-    handleTitleChange(event) {      
+    handleUserChange(event) {      
        this.setState({ [event.target.name]: event.target.value});
     },
-    handleBodyChange(event) {      
-       this.setState({ [event.target.name]: event.target.value});
-    },
-    handleLeaveTypeChange(event) {      
-       this.setState({ [event.target.name]: event.target.value});
-    },
-
-    handleLeaveDayChange(event) {
-        console.log(date);
-        this.setState({
-          leaveday: event.target.value
-        })
-    },
+    
     handleAddForm: function(event) {
         event.preventDefault();
+        var pickedDate = $(".datepicker").val();
         helpers.addLeave(this.state.user_id, this.state.group_id, this.state.username ,
             this.state.leaveTitle, 
             this.state.leaveBody, this.state.leavetype,
-            this.state.leaveday).then(function(response) {
+            pickedDate).then(function(response) {
         }.bind(this));
         Materialize.toast('Leave Requested Successfully', 3000,'blue rounded');
         this.clearForm();
@@ -91,7 +77,7 @@ var ApplyLeave = React.createClass({
                         <form className="col m12" onSubmit={this.handleAddForm} id="applyLeaveForm">
                         <div className="row">
                                 <div className="input-field col m3 s6">
-                                    <select className="browser-default" name="leavetype" value={this.state.leavetype} onChange={this.handleLeaveTypeChange} required>
+                                    <select className="browser-default" name="leavetype" value={this.state.leavetype} onChange={this.handleUserChange} required>
                                         <option value="" disabled>Leave Type</option>
                                         <option value="CL">Casual Leave</option>
                                         <option value="SL">Sick Leave</option>
@@ -109,7 +95,7 @@ var ApplyLeave = React.createClass({
                                         type="text"
                                         className="validate datepicker"
                                         value={this.state.leaveday}
-                                        onChange={this.handleLeaveDayChange}                                    
+                                        onChange={this.handleUserChange}                                    
                                         required />
                                 </div>
                             </div>
@@ -121,7 +107,7 @@ var ApplyLeave = React.createClass({
                                         type="text"
                                         className="validate"
                                         value={this.state.leaveTitle}
-                                        onChange={this.handleTitleChange}
+                                        onChange={this.handleUserChange}
                                         required />
                                 </div>
                             </div>
@@ -133,7 +119,7 @@ var ApplyLeave = React.createClass({
                                         type="text"
                                         className="validate"
                                         value={this.state.leaveBody}
-                                        onChange={this.handleBodyChange}
+                                        onChange={this.handleUserChange}
                                         required />
                                 </div>
                             </div>

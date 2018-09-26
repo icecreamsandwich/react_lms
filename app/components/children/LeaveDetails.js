@@ -140,7 +140,9 @@ var LeaveDetails = React.createClass({
                                 <tr>
                                     <th data-field="name">CL</th>
                                     <th data-field="name">SL</th>
-                                    <th data-field="name">AL</th>
+                                    <th data-field="name">Total AL</th>
+                                    <th data-field="name">AL upto September</th>
+                                    <th data-field="name">AL Sept-march</th>
                                     <th data-field="name">LOP</th>
                                 </tr>
                             </thead>
@@ -156,6 +158,12 @@ var LeaveDetails = React.createClass({
                                         </td>
                                         <td>
                                             {leavedetail.AL}
+                                        </td>
+                                        <td>
+                                            {leavedetail.Al_upto_sept}
+                                        </td>
+                                        <td>
+                                            {leavedetail.Al_sept_to_march}
                                         </td>
                                         <td>
                                             {leavedetail.LOP}

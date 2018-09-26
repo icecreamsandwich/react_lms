@@ -27,7 +27,8 @@ var ManagerEmployeeAll = React.createClass({
             doj: "",
             showEmployeeForm : false,
             employeeForm :"",
-            pickedDate :""
+            pickedDate :"",
+            selectedFile :""
         };
     },
 
@@ -69,12 +70,15 @@ var ManagerEmployeeAll = React.createClass({
     handleUpdateForm: function(event) {
         event.preventDefault();
         var pickedDate = $(".datepicker").val();
-        alert(pickedDate);
-        helpers.updateEmployee(this.state.selectedEmployee, this.state.firstName, this.state.lastName, this.state.addressOne, this.state.addressTwo, this.state.city, this.state.state, this.state.zip, this.state.email, this.state.phone, this.state.phoneType,
-             this.state.designation,this.state.team, pickedDate).then(function(response) {
+        helpers.updateEmployee(this.state.selectedEmployee, this.state.firstName, 
+            this.state.lastName, this.state.addressOne, this.state.addressTwo, 
+            this.state.city, this.state.state, this.state.zip, this.state.email, 
+            this.state.phone, this.state.phoneType,
+             this.state.designation,this.state.team, pickedDate, this.state.selectedFile).then(function(response) {
         }.bind(this));
 
-        helpers.updateEmpTeam(this.state.emp_user_id, this.state.team, this.state.designation).then(function(response) {
+        helpers.updateEmpTeam(this.state.emp_user_id, this.state.team, 
+            this.state.designation, this.state.selectedFile).then(function(response) {
         }.bind(this));
 
         Materialize.toast("Employee updated", 3000);

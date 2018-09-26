@@ -96,7 +96,9 @@ var helper = {
   },
 
 
-  updateEmployee: function(id, firstName, lastName, addressOne, addressTwo, city, state, zip, email, phone, phoneType, designation, team, doj) {
+  updateEmployee: function(id, firstName, lastName, addressOne, addressTwo, 
+    city, state, zip, email, phone, 
+    phoneType, designation, team, doj, profilePic) {
        return axios.put("/updateEmployee/" + id, {
            firstName: firstName,
            lastName: lastName,
@@ -111,14 +113,16 @@ var helper = {
            designation: designation,
            team: team,
            doj: doj,
+           profile_pic: profilePic,
            active: 1
        });
   },
 
-  updateEmpName: function(emp_id, firstName, lastName)  {
+  updateEmpName: function(emp_id, firstName, lastName, profilePic)  {
     return axios.put("/updateEmpName/" + emp_id, {
         firstName: firstName,
-        lastName: lastName
+        lastName: lastName,
+        profilePic: profilePic
        });
   },
 

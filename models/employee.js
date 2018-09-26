@@ -45,6 +45,9 @@ var EmployeeSchema = new Schema({
         type: Date,
         default: "",
     },
+    profile_pic: {
+        type: String
+    },
     active: {
         type: Number,
         default: 0

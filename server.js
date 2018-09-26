@@ -155,7 +155,7 @@
       username: req.body.username,
       email: req.body.email,
       userType: req.body.userType,
-      picture: "https://raw.githubusercontent.com/clsavino/react-shift-scheduler/master/public/assets/images/logo.png",
+      // picture: "https://raw.githubusercontent.com/clsavino/react-shift-scheduler/master/public/assets/images/logo.png",
       groupId : "",
       designationId:"",
       active:0
@@ -171,16 +171,7 @@
           employee.create({
                 firstName: req.body.username,
                 lastName: req.body.username,
-                addressOne: "",
-                addressTwo: "",
-                city: "",
-                state: "",
-                zip: "",
                 email: req.body.email,
-                phone: "",
-                phoneType: "",
-                designation: "",
-                team: "",
                 user_id : user._id,
                 active:0
               }, function(req, res) {           

@@ -18,8 +18,6 @@ const storage = multer.diskStorage({
         cb(null, './public/protected/profile_pics');
   },
   filename(req, file, cb) {
-    var username = req.body.firstName;
-    console.log(req.params.firstName);
     cb(null, `${file.originalname}`); //-${new Date()}
   },
 });
@@ -232,6 +230,7 @@ router.put("/updateEmployee/:id", function (req, res) {
         designation: req.body.designation,
         team: req.body.team,
         doj: req.body.doj,
+        profile_pic: req.body.profile_pic,
         active: req.body.active
     }, function (err) {
         if (err) {
@@ -261,6 +260,7 @@ router.put("/updateEmpTeam/:id", function (req, res) {
     User.findOneAndUpdate({"_id": req.params.id}, {
         groupId: req.body.groupId,
         designationId: req.body.designationId,
+        picture: req.body.profilePic,
         active: req.body.active
     }, function (err,doc) {
         if (err) {
