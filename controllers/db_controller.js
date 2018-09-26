@@ -208,6 +208,7 @@ router.put("/updateEmployee/:id", function (req, res) {
         phoneType: req.body.phoneType,
         designation: req.body.designation,
         team: req.body.team,
+        doj: req.body.doj,
         active: req.body.active
     }, function (err) {
         if (err) {

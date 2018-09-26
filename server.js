@@ -209,7 +209,7 @@
 
   //change password (passport-local-mongoose)
   app.post('/manager/reset-password', function(req, res, next){
-    passport.changePassword(req.body.oldpassword,req.body.newpassword, function(err) {
+    passportLocalMongoose.changePassword(req.body.oldpassword,req.body.newpassword, function(err) {
             if (err){
                 return next(err) 
             }

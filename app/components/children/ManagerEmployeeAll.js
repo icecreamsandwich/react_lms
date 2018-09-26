@@ -24,17 +24,20 @@ var ManagerEmployeeAll = React.createClass({
             design_id: "" ,
             doj: "",
             showEmployeeForm : false,
-            employeeForm :""
+            employeeForm :"",
+            pickedDate :""
         };
     },
 
     componentDidMount: function() {
 
          //Apply date picker to the Leave day field
-        $('.datepicker').pickadate({
+    /*    var picker = $('.datepicker').pickadate({
           selectMonths: true, // Creates a dropdown to control month
           selectYears: 15 // Creates a dropdown of 15 years to control year
         });   
+
+        var pickedDate = picker.get() // Short for `picker.get('value')`.*/
 
         helpers.getCurrentUser().then(function(response) {
           if (response !== this.state.username) {
@@ -52,9 +55,9 @@ var ManagerEmployeeAll = React.createClass({
          //Apply date picker to the Leave day field
         $('.datepicker').pickadate({
           selectMonths: true, // Creates a dropdown to control month
-          selectYears: 15 // Creates a dropdown of 15 years to control year
+          selectYears: 15,
+          format : "yyyy-mm-dd"
         });   
-        
     },
     
     getEmployees: function() {   
@@ -69,6 +72,14 @@ var ManagerEmployeeAll = React.createClass({
     handleUserChange(event) {
        this.setState({ [event.target.name]: event.target.value});
     },
+
+    handleDatePickerChange(event) {
+        //traditional way of geting value of input field
+        var pickedDate = $(".datepicker").val();
+        alert(pickedDate);
+       this.setState({ pickedDate: pickedDate});
+    },
+    
 
     /*handleAddForm: function(event) {
         event.preventDefault();
@@ -91,8 +102,12 @@ var ManagerEmployeeAll = React.createClass({
 
     handleUpdateForm: function(event) {
         event.preventDefault();
+
+        var pickedDate = $(".datepicker").val();
+        alert(pickedDate);
+
         helpers.updateEmployee(this.state.selectedEmployee, this.state.firstName, this.state.lastName, this.state.addressOne, this.state.addressTwo, this.state.city, this.state.state, this.state.zip, this.state.email, this.state.phone, this.state.phoneType,
-             this.state.designation,this.state.team).then(function(response) {
+             this.state.designation,this.state.team, pickedDate).then(function(response) {
         }.bind(this));
 
         helpers.updateEmpTeam(this.state.emp_user_id, this.state.team, this.state.designation).then(function(response) {
@@ -285,7 +300,7 @@ var ManagerEmployeeAll = React.createClass({
                                         type="text"
                                         className="validate datepicker"
                                         value={this.state.doj}
-                                        onChange={this.handleUserChange}
+                                        onChange={this.handleDatePickerChange}
                                         required />
                                 </div>
                             </div>

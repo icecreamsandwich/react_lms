@@ -96,7 +96,7 @@ var helper = {
   },
 
 
-  updateEmployee: function(id, firstName, lastName, addressOne, addressTwo, city, state, zip, email, phone, phoneType, designation, team) {
+  updateEmployee: function(id, firstName, lastName, addressOne, addressTwo, city, state, zip, email, phone, phoneType, designation, team, doj) {
        return axios.put("/updateEmployee/" + id, {
            firstName: firstName,
            lastName: lastName,
@@ -110,6 +110,7 @@ var helper = {
            phoneType: phoneType,
            designation: designation,
            team: team,
+           doj: doj,
            active: 1
        });
   },
