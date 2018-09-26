@@ -10,6 +10,7 @@ var LeaveDetails = React.createClass({
             showCLLeaves: false,
             showSLLeaves: false,
             showALLeaves: false,
+            empDoj:""
         };
     },
 
@@ -38,6 +39,16 @@ var LeaveDetails = React.createClass({
             }
         }.bind(this));
 
+        //get logged in employee  details 
+          helpers.getCurrentEmployeeDetails(this.state.user_id).then(function(response) {
+            var curEmployeeDetails = response.data
+            console.log(curEmployeeDetails)
+            curEmployeeDetails.map(function(employee, i) {
+                this.setState({empDoj:employee.doj});
+            }, this);
+
+        }.bind(this));
+
     },
 
     componentDidUpdate() {
@@ -54,6 +65,28 @@ var LeaveDetails = React.createClass({
         });
          if(leaveTypeStr !== "") Materialize.toast('Your '+leaveTypeStr+' have been exhausted. Please take care while taking leaves',
           10000,'red rounded');
+
+        //Annual leaves calculations will happen on 31st march
+        var currentDate = new Date();
+        currentDate.setHours(0,0,0,0);
+        if(currentDate.indexOf("31-03") !== -1){
+            var doj = new Date(this.state.empDoj);        
+            var timeDiff = Math.abs(currentDate.getTime() - doj.getTime());
+            var diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24)); 
+            var diffYears = Math.round(diffDays / 365) ; 
+            if(diffYears > 2){
+                //function call to add the annual leaves to 12
+                // CL and SL will be resetted to 5 and 12
+            }
+            else{
+               // CL and SL will be resetted to 5 and 12
+            }
+        }
+        
+    },
+
+    componentWillUpdate(){
+        
     },
 
    showCLLeavesClickHandler : function (){
@@ -66,7 +99,7 @@ var LeaveDetails = React.createClass({
       this.setState({ showALLeaves: true, showCLLeaves: false,showSLLeaves: false });
    },
 
-    render: function() {
+    render: function() {          
         let LForm= "";
         let filterAr = [];
         let filterArSL = [];

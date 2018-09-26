@@ -193,7 +193,8 @@
       if (err) { return next(err) }
       if (!user) {
         // *** Display message without using flash option
-         return res.sendFile(path.resolve(__dirname, "public", "notauth.html"))
+        res.redirect("/");
+         // return res.sendFile(path.resolve(__dirname, "public", "notauth.html"))
         }
       req.logIn(user, function(err) {
         if (err) { return next(err); }

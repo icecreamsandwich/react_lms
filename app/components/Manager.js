@@ -14,7 +14,10 @@ var Manager = React.createClass({
     componentDidMount: function() {
        helpers.getCurrentUser().then(function(response) {
           if (response !== this.state.username) {
-            this.setState({ picture: response.data.picture, username: response.data.username });
+            this.setState({ picture: response.data.picture, 
+                username: response.data.username,
+                user_id: response.data._id,
+                active: response.data.active });
           }
         }.bind(this));
     },
@@ -42,8 +45,7 @@ var Manager = React.createClass({
                             <li><a className="dropdown-button black-text" href="#" data-activates="dropdown2" data-beloworigin="true" data-hover="true">Leave Management</a></li>
                             {/*<li><a className="black-text" href="/manager/schedulesCreate">Schedules<i className="material-icons right">access_time</i></a></li> 
                             <li><a className="black-text" href="/manager/lorem">Lorem</a></li>*/}
-
-                            <li><a className="dropdown-button black-text" href="#" data-activates="dropdown1" data-beloworigin="true" data-hover="true">{this.state.username}<img className="circle circle-small" src={this.state.picture}/></a></li>                            
+                            <li><a className="dropdown-button black-text" href="#" data-activates="dropdown1" data-beloworigin="true" data-hover="true">{this.state.username}<img className="circle circle-small" src={"./protected/profile_pics/"+this.state.picture}/></a></li>                            
                         </ul>
                         <ul id="slide-out" className="side-nav">
                             <li>

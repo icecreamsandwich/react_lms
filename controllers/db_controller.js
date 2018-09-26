@@ -37,9 +37,9 @@ var User = require("../models/user");
 const creds = require('../mail_config/config');
 
 //Getting Employees based on condition from the database
-router.get("/getAllEmployeesFilter/:groupId", function (req, res) {
-    var groupId = req.params.groupId;
-    employee.find({"active": 1,"team":groupId}).exec(function (err, doc) {
+router.get("/getCurrentEmployeeDetails/:empId", function (req, res) {
+    var empId = req.params.empId;
+    employee.find({"active": 1,"user_id":empId}).exec(function (err, doc) {
         if (err) {
             console.log(err);
         }
@@ -398,6 +398,20 @@ router.post("/sendEmail", function (req, res){
 
 //File uploading 
 router.post("/fileUpload",upload.single('selectedFile'), function (req, res){
+    //unlink the existing profile pic(if existas) from the public/protected folder
+    /*fs.stat("./public/protected/profile_pics/"+req.file.profile_pic, function(err, stat) {
+    if(err == null) {
+        console.log('File exists');
+    } else{
+        fs.unlink("./public/protected/profile_pics/"+req.file.profile_pic, (err) => {
+            if (err) {
+                console.log("failed to delete local image:"+err);
+            } else {
+                console.log('successfully deleted local image');                                
+            }
+        });
+    }
+    */
      res.send('File uploaded Successfully');
 });
   

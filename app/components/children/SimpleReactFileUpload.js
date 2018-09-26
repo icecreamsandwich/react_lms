@@ -7,11 +7,27 @@ class SimpleReactFileUpload extends React.Component {
   constructor(props) {
     super(props);
     this.state ={
-      file:""
+      file:"",
+      selectedFile : "",
+      description : "",
+      profile_pic : ""
     }
     this.onFormSubmit = this.onFormSubmit.bind(this)
     this.onChange = this.onChange.bind(this)
     // this.fileUpload = this.fileUpload.bind(this)
+  }
+
+  componentDidMount() {
+    helpers.getCurrentUser().then(function(response) {
+            if (response !== this.state.username) {
+              this.setState({ user_id: response.data._id, 
+                  group_id: response.data.groupId,
+                  design_id: response.data.designationId,
+                  user_type: response.data.userType,
+                  profile_pic: response.data.picture
+              });
+            }
+          }.bind(this)); 
   }
 
   onFormSubmit(e){
@@ -19,6 +35,7 @@ class SimpleReactFileUpload extends React.Component {
       const { description, selectedFile, firstName } = this.state;
       let formData = new FormData();
 
+      formData.append('profile_pic', this.state.profile_pic);
       formData.append('description', description);
       formData.append('selectedFile', selectedFile);
       formData.append('firstName', this.props.firstName);
@@ -30,31 +47,18 @@ class SimpleReactFileUpload extends React.Component {
       }
       axios.post('/fileUpload', formData,config).then((response)=>{
             alert(response.data);
-     /*       if (response.data.msg === 'success'){
-                alert("Message Sent."); 
-                this.resetForm()
-            }else if(response.data.msg === 'fail'){
-                alert("Message failed to send.")
-            }*/
         })      
-      // alert(response)
     }
 
     onChange (e) {
-      switch (e.target.name) {
-        case 'selectedFile':
-          this.setState({ selectedFile: e.target.files[0] });
-          break;
-        default:
-          this.setState({ [e.target.name]: e.target.value });
-      }
+       this.setState({ selectedFile: e.target.files[0] });
     }
   
   render() {
     return (
       <form onSubmit={this.onFormSubmit} encType="multipart/form-data">
         <h5>Upload Profile Image</h5>
-        <input type="file" name="selectedFile" onChange={this.onChange} />
+        <input type="file" id="fileInput" name="selectedFile" onChange={this.onChange} />
         <button type="submit">Upload</button>
       </form>
    )
