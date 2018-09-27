@@ -153,6 +153,42 @@ router.put("/updateLeaveRequest/:id", function (req, res) {
 
 });
 
+//Update employee leave details on new financial Year
+router.put("/updateEmpLeaveDetails/:emp_id", function (req, res) {
+    LeaveDetails.findOneAndUpdate({"user_id": req.params.emp_id}, {
+        CL: req.body.CL,
+        SL: req.body.SL,
+        AL: req.body.updatedAL,
+        Al_upto_sept: req.body.leave_upto_sept,
+        Al_sept_to_march: req.body.leave_sept_march,
+    }, function (err) {
+        if (err) {
+            console.log(err);
+        } else {
+            res.send("Employee leaves are updated");
+        }
+    });
+});
+
+//Updating existing employee schedule
+router.put("/updateSchedule/:id", function (req, res) {
+    var newSchedule = req.body.employeeSchedule;
+    EmployeeSchedule.findOneAndUpdate({"_id": req.params.id}, {
+        monday: newSchedule.monday,
+        tuesday: newSchedule.tuesday,
+        wednesday: newSchedule.wednesday,
+        thursday: newSchedule.thursday,
+        friday: newSchedule.friday,
+        saturday: newSchedule.saturday,
+        sunday: newSchedule.sunday
+    }, function (err) {
+        if (err) {
+            console.log(err);
+        } else {
+            res.send("Employee schedule updated");
+        }
+    });
+});
 //Posting new Employee to the database
 router.post("/addEmployee", function (req, res) {
     employee.create({
@@ -204,7 +240,7 @@ router.post("/addLeave", function (req, res) {
 
 //Getting All Leave Requests from the database
 router.get("/getALLLeaveRequests", function (req, res) {
-    Leave.find({"approved": false}).exec(function (err, doc) {
+    Leave.find().exec(function (err, doc) {  //{"approved": false}
         if (err) {
             console.log(err);
         }

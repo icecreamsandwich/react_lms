@@ -79,9 +79,13 @@ var LeaveRequests = React.createClass({
             }.bind(this));
             Materialize.toast('Leave Approved Successfully', 3000,'green rounded');
             this.setState({ showForm: false });
+            location.reload()
         },
 
     render: function() {
+        
+         var filterd_leave_requests = this.state.LeaveRequests.filter((leaves) => 
+                (leaves.approved == false));
         return (
             <div className="row">
                 <div className="col s12">
@@ -98,7 +102,7 @@ var LeaveRequests = React.createClass({
                                 </tr>
                             </thead>
                             <tbody>
-                                {this.state.LeaveRequests.map(function(leaveRequests, i) {
+                                {filterd_leave_requests.map(function(leaveRequests, i) {
                                 return (
                                     <tr key={i}>
                                         <td className="fullName">

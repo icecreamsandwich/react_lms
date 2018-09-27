@@ -95,6 +95,16 @@ var helper = {
     })
   },
 
+//Update employee leave details on new financial Year
+updateEmpLeaveDetails: function(emp_id, CL, SL, updatedAL, leave_upto_sept , leave_sept_march)  {
+    return axios.put("/updateEmpLeaveDetails/" + emp_id, {
+        CL: CL,
+        SL: SL,
+        updatedAL: updatedAL,
+        leave_upto_sept: leave_upto_sept,
+        leave_sept_march: leave_sept_march
+       });
+  },
 
   updateEmployee: function(id, firstName, lastName, addressOne, addressTwo, 
     city, state, zip, email, phone, 

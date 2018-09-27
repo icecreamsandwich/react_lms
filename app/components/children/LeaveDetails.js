@@ -7,10 +7,11 @@ var LeaveDetails = React.createClass({
         return {
             leaveDetails: [],
             LeaveRequests: [],
+            allEmployees: [],
             showCLLeaves: false,
             showSLLeaves: false,
             showALLeaves: false,
-            empDoj:""
+            empDoj:"",
         };
     },
 
@@ -39,14 +40,11 @@ var LeaveDetails = React.createClass({
             }
         }.bind(this));
 
-        //get logged in employee  details 
-          helpers.getCurrentEmployeeDetails(this.state.user_id).then(function(response) {
-            var curEmployeeDetails = response.data
-            console.log(curEmployeeDetails)
-            curEmployeeDetails.map(function(employee, i) {
-                this.setState({empDoj:employee.doj});
-            }, this);
-
+        //get ALL employee  details 
+        helpers.getAllEmployees().then(function(response) {
+            if (response !== this.state.allEmployees) {
+                this.setState({ allEmployees: response.data });
+            }
         }.bind(this));
 
     },
@@ -54,7 +52,7 @@ var LeaveDetails = React.createClass({
     componentDidUpdate() {
        //fetch details of the leaves of the current user from here 
        var leaveTypeStr = "";  
-       var filterdleaves = this.state.leaveDetails.filter((leaves) => (leaves.user_id == this.state.user_id ));
+       var filterdleaves = this.state.leaveDetails.filter((leaves) => (leaves.user_id == this.state.user_id));
         filterdleaves.map(function(leave_details, i){
              var CL = leave_details.CL;
              var SL = leave_details.SL;
@@ -63,23 +61,54 @@ var LeaveDetails = React.createClass({
              else if(SL == 0)leaveTypeStr = "Sick Leaves";
              else if(AL == 0)leaveTypeStr = "Annual Leaves";
         });
-         if(leaveTypeStr !== "") Materialize.toast('Your '+leaveTypeStr+' have been exhausted. Please take care while taking leaves',
-          10000,'red rounded');
+         /*if(leaveTypeStr !== "") Materialize.toast('Your '+leaveTypeStr+' have been exhausted. Please take care while taking leaves',
+          10000,'red rounded');*/
 
         //Annual leaves calculations will happen on 31st march
-        var currentDate = new Date();
-        currentDate.setHours(0,0,0,0);
-        if(currentDate.indexOf("31-03") !== -1){
+        
+        // get formatted date 
+        var today = new Date();
+        var dd = today.getDate();
+        var mm = today.getMonth()+1; //January is 0!
+
+        var yyyy = today.getFullYear();
+        if(dd<10){
+            dd='0'+dd;
+        } 
+        if(mm<10){
+            mm='0'+mm;
+        } 
+        var today = yyyy+'-'+mm+'-'+dd;
+        if(today.indexOf("03-31") != -1){
             var doj = new Date(this.state.empDoj);        
             var timeDiff = Math.abs(currentDate.getTime() - doj.getTime());
             var diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24)); 
             var diffYears = Math.round(diffDays / 365) ; 
             if(diffYears > 2){
                 //function call to add the annual leaves to 12
-                // CL and SL will be resetted to 5 and 12
+                // and CL and SL will be resetted to 5 and 12
+            if(AL != 0){
+                var updatedAL = AL+12;
+                var leave_upto_sept = AL;
+                var leave_sept_march = updatedAL-AL;
+            } 
+            else AL =12;
+            CL =5 ; SL = 12;
+            helpers.updateEmpLeaveDetails(this.state.user_id, CL, 
+                SL, updatedAL ,leave_upto_sept , leave_sept_march).then(function(response) {
+            }.bind(this));
+
+            Materialize.toast("Employees leave details updated", 3000,"rounded green");
+
             }
             else{
-               // CL and SL will be resetted to 5 and 12
+               // CL and SL will be resetted to 5 and 7
+               CL =5 ; SL = 7; AL = 0;
+            helpers.updateEmpTeam(this.state.user_id, CL, 
+                SL, AL ,"" , "").then(function(response) {
+            }.bind(this));
+
+            Materialize.toast("Employees leave details updated", 3000,"rounded green");
             }
         }
         
@@ -102,9 +131,12 @@ var LeaveDetails = React.createClass({
     render: function() {          
         let LForm= "";
         let filterAr = [];
-        let filterArSL = [];
-        let filterArAL = [];
         {             
+            /*var filterd_employees = this.state.allEmployees.filter((employees) => (employees.user_id == this.state.user_id ));
+            filterd_employees.map(function(curemployee, i) {
+               this.setState({empDoj:curemployee.doj})
+            });*/
+
             //Get all leaved filtered by CL,SL and AL 
             var filterdleaves = this.state.leaveDetails.filter((leaves) => (leaves.user_id == this.state.user_id ));
             var filterdleaveRequestsCL = this.state.LeaveRequests.filter((leaveRequests) => 
