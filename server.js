@@ -190,7 +190,10 @@
   app.post('/login', function(req, res, next) {
     passport.authenticate('local', function(err, user, info) {
       failureFlash: true // optional, see text as well
-      if (err) { return next(err) }
+      if (err) { 
+        res.redirect("/");
+        return next(err) 
+      }
       if (!user) {
         // *** Display message without using flash option
         res.redirect("/");

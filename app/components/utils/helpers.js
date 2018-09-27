@@ -128,22 +128,30 @@ updateEmpLeaveDetails: function(emp_id, CL, SL, updatedAL, leave_upto_sept , lea
        });
   },
 
-  updateEmpName: function(emp_id, firstName, lastName, profilePic)  {
+  updateEmpName: function(emp_id, firstName, lastName)  {
     return axios.put("/updateEmpName/" + emp_id, {
         firstName: firstName,
         lastName: lastName,
-        profilePic: profilePic
        });
   },
 
   //Update employee's group id to user schema
   updateEmpTeam: function(user_id, team_id, design_id, profilePic)  {
-    return axios.put("/updateEmpTeam/" + user_id, {
+    if(profilePic != ""){
+      return axios.put("/updateEmpTeam/" + user_id, {
         groupId: team_id,
         designationId: design_id,
         profilePic: profilePic,
         active: 1
        });
+    }
+    else{
+      return axios.put("/updateEmpTeam/" + user_id, {
+        groupId: team_id,
+        designationId: design_id,
+        active: 1
+       });
+    }
   },
 
   removeEmployee: function(id) {

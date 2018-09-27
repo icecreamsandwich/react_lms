@@ -8,9 +8,8 @@ class SimpleReactFileUpload extends React.Component {
     super(props);
     this.state ={
       file:"",
-      selectedFile : "",
+      // selectedFile : "",
       description : "",
-      profile_pic : ""
     }
     this.onFormSubmit = this.onFormSubmit.bind(this)
     this.onChange = this.onChange.bind(this)
@@ -34,8 +33,7 @@ class SimpleReactFileUpload extends React.Component {
       e.preventDefault();
       const { description, selectedFile, firstName } = this.state;
       let formData = new FormData();
-
-      formData.append('profile_pic', this.state.profile_pic);
+      
       formData.append('description', description);
       formData.append('selectedFile', selectedFile);
       formData.append('firstName', this.props.firstName);

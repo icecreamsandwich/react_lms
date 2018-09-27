@@ -24,7 +24,7 @@ class LeavePoilicy extends React.Component {
             <p><a className="wiki-page" href="https://support.sysally.net/projects/mysysally/wiki/Sick_Leave">Sick Leave</a></p>
             <p><a className="wiki-page" href="https://support.sysally.net/projects/mysysally/wiki/Leave_Without_Pay">Leave Without Pay</a></p>
             <p><a className="wiki-page" href="https://support.sysally.net/projects/mysysally/wiki/Maternity_Leave">Maternity Leave</a></p>
-            <p><strong><a class="wiki-page" href="/projects/mysysally/wiki/_FAQs"> FAQs</a></strong></p>
+            <p><strong><a className="wiki-page" href="/projects/mysysally/wiki/_FAQs"> FAQs</a></strong></p>
           </div>
           </div>
       );
