@@ -182,21 +182,13 @@ updateEmpLeaveDetails: function(emp_id, CL, SL, updatedAL, leave_upto_sept , lea
   },
   
     //Send email functionality
-    sendMail:function(name,email,message,maillist) {
+    sendMail:function(name,message,maillist) {
       return axios.post('/sendEmail', {
         name: name,
-        email: email,
         message: message,
         maillist: maillist
       });
     },
-
-    //Upload image
-   /* fileUpload:function(formData,config) {
-      return axios.post('/fileUpload', {
-        fd: formData,
-      },config);
-    },*/
 };
 
 module.exports = helper;

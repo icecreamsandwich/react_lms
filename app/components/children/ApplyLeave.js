@@ -15,6 +15,8 @@ var ApplyLeave = React.createClass({
             picture: "",
             user_id:"",
             leavetype:"",
+            managerEmail:"",
+            hrEmail:"",
        /*     leaveday:"",*/
         };
     },
@@ -36,6 +38,12 @@ var ApplyLeave = React.createClass({
           selectYears: 15 ,// Creates a dropdown of 15 years to control year
           format: 'yyyy-mm-dd',
         });
+
+        helpers.getAllEmployees().then(function(response) {
+            if (response !== this.state.allEmployees) {
+                this.setState({ allEmployees: response.data });
+            }
+        }.bind(this));
     },
 
     handleUserChange(event) {      
@@ -50,6 +58,17 @@ var ApplyLeave = React.createClass({
             this.state.leaveBody, this.state.leavetype,
             pickedDate).then(function(response) {
         }.bind(this));
+        //Send mail to the manager and HR
+        var maillist  = [];
+        maillist.push(this.state.managerEmail,this.state.hrEmail);
+        var message = this.state.leaveBody;
+       helpers.sendMail(this.state.username,message,maillist).then((response)=>{
+            if (response.data.msg === 'success'){
+                Materialize.toast('Email Sent Successfully', 3000,'green rounded');
+            }else if(response.data.msg === 'fail'){
+                Materialize.toast('Message failed to send', 3000,'red rounded');
+            }
+        })
         Materialize.toast('Leave Requested Successfully', 3000,'blue rounded');
         this.clearForm();
     },
@@ -69,6 +88,14 @@ var ApplyLeave = React.createClass({
     },
 
     render: function() {
+        //select the employees with the same group id and with designation of (Manager | HR )
+        var filteredEmployees = this.state.allEmployees.filter((employee) => 
+                (this.state.group_id == employee.group_id && 
+                    (employee.designation == 1 ||employee.designation == 5)));
+            filteredEmployees.map(function(employee, i) {
+                  if(employees.designation == 1) this.setState({managerEmail:employee.email});
+                  else if(employees.designation == 5) this.setState({hrEmail:employee.email});
+            });
         return (
             <div className="row">
             <h5>Apply for Leave </h5>

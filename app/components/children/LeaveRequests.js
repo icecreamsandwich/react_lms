@@ -15,6 +15,7 @@ var LeaveRequests = React.createClass({
             LeaveRequests: [],
             selectedLeaveRequest: [],
             leaveDetails: [],
+            userEmail: "",
         };
     // this.leaveFormSubmitHandler = this.leaveFormSubmitHandler.bind(this);
     },
@@ -39,6 +40,12 @@ var LeaveRequests = React.createClass({
         helpers.getAllleaveDetails().then(function(response) {
                 this.setState({ leaveDetails: response.data });
         }.bind(this));  
+
+        helpers.getAllEmployees().then(function(response) {
+            if (response !== this.state.allEmployees) {
+                this.setState({ allEmployees: response.data });
+            }
+        }.bind(this));
     },
 
     leaveClickHandler: function(event) {
@@ -79,11 +86,27 @@ var LeaveRequests = React.createClass({
             }.bind(this));
             Materialize.toast('Leave Approved Successfully', 3000,'green rounded');
             this.setState({ showForm: false });
-            location.reload()
+            
+            //Send mail back to the employee that leave has been approved
+            var maillist  = [];
+            maillist.push(this.state.userEmail);
+            helpers.sendMail("",message,maillist).then((response)=>{
+                if (response.data.msg === 'success'){
+                    Materialize.toast('Email Sent Successfully', 3000,'green rounded');
+                }else if(response.data.msg === 'fail'){
+                    Materialize.toast('Message failed to send', 3000,'red rounded');
+                }
+            })
+            //location.reload()
         },
 
     render: function() {
-        
+        //Get the user's email from the employees collection 
+        var filterd_employees = this.state.allEmployees.filter((employee) => 
+                (employee.emp_id == this.state.selectedLeaveRequest.emp_id));
+            filterd_employees.map(function(employeee,i){
+                 this.setState({userEmail:employeee.email})
+            }); 
          var filterd_leave_requests = this.state.LeaveRequests.filter((leaves) => 
                 (leaves.approved == false));
         return (

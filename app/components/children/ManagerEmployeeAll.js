@@ -2,6 +2,7 @@ var React = require("react");
 var ReactDOM = require('react-dom');
 var helpers = require("../utils/helpers");
 var SimpleReactFileUpload =  require("./SimpleReactFileUpload");
+var UploadRecords =  require("./UploadRecords");
 var {Tab,Tabs,TabList,TabPanel} = require("react-tabs");
 
 var ManagerEmployeeAll = React.createClass({
@@ -21,6 +22,7 @@ var ManagerEmployeeAll = React.createClass({
             team: "",
             emp_user_id : "",
             allEmployees: [],
+            leaveDetails: [],
             selectedEmployee: "",
             emp_id: "" ,  
             group_id: "" ,  
@@ -45,6 +47,11 @@ var ManagerEmployeeAll = React.createClass({
           }
         }.bind(this)); 
         this.getEmployees();  
+        helpers.getAllleaveDetails().then(function(response) {
+            if (response !== this.state.leaveDetails) {
+                this.setState({ leaveDetails: response.data });
+            }
+        }.bind(this));
     },
 
     componentDidUpdate: function(){
@@ -54,6 +61,11 @@ var ManagerEmployeeAll = React.createClass({
           selectYears: 15 ,// Creates a dropdown of 15 years to control year
           format : "yyyy-mm-dd"
         });   
+        // get formatted date 
+        var today = new Date();
+        var yyyy = today.getFullYear();
+
+        this.setState({currentYear:yyyy,nextYear:yyyy+1});
         
     },
     
@@ -147,16 +159,6 @@ var ManagerEmployeeAll = React.createClass({
     },
 
     activeButtons: function() {
-        // don't allow updating or removing on empty form
-        /*if (this.state.selectedEmployee == "") {
-            document.getElementById("addEmployee").className = "btn btn-large waves-effect waves-light green accent-3";
-            document.getElementById("updateEmployee").className += " disabled";
-            document.getElementById("removeEmployee").className += " disabled";
-        } else {
-            document.getElementById("addEmployee").className += " disabled";
-            document.getElementById("updateEmployee").className = "btn btn-large waves-effect waves-light blue accent-3";
-            document.getElementById("removeEmployee").className = "btn btn-large waves-effect waves-light red accent-3";
-        }*/
     },
 
     render: function() {
@@ -172,6 +174,8 @@ var ManagerEmployeeAll = React.createClass({
                 var filterd_employees = this.state.allEmployees.filter((employees) => (employees.team == this.state.group_id &&
                   employees.user_id != this.state.user_id ) );
             }         
+            //Get all leaved filtered by CL,SL and AL 
+            var filterdleavesDetails = this.state.leaveDetails.filter((leaves) => (leaves.user_id == this.state.emp_user_id ));
             if (this.state.showEmployeeForm){
                 employeeForm = 
             <Tabs  onSelect={tabIndex => this.setState({ tabIndex })}> {/*selectedIndex={this.state.tabIndex}*/}
@@ -349,10 +353,59 @@ var ManagerEmployeeAll = React.createClass({
 				    </TabPanel>				    
 			        <TabPanel>
 			        <p>Leave details goes here</p>
+                <div className="row">
+                    <div className="col s12">
+                    <div className="section">
+                        <h5>Leave Remaining ({this.state.currentYear}-{this.state.nextYear})</h5>
+                        <table className="bordered highlight striped">
+                            <thead>
+                                <tr>
+                                    <th data-field="name">CL</th>
+                                    <th data-field="name">SL</th>
+                                    <th data-field="name">Total AL</th>
+                                    <th data-field="name">AL upto September</th>
+                                    <th data-field="name">AL Sept-march</th>
+                                    <th data-field="name">LOP</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {filterdleavesDetails.map(function(leavedetail, i) {
+                                return (
+                                    <tr key={i}>
+                                        <td className="fullName">
+                                            {leavedetail.CL}
+                                        </td>
+                                        <td className="schedule">
+                                            {leavedetail.SL}
+                                        </td>
+                                        <td>
+                                            {leavedetail.AL}
+                                        </td>
+                                        <td>
+                                            {leavedetail.Al_upto_sept}
+                                        </td>
+                                        <td>
+                                            {leavedetail.Al_sept_to_march}
+                                        </td>
+                                        <td>
+                                            {leavedetail.LOP}
+                                        </td>
+                                    </tr>
+                                );
+                            }, this)}
+                            </tbody>
+                        </table>
+                    </div>
+                    </div>
+                </div>
 				    </TabPanel>
 
 				    <TabPanel>
-				    <p>Employee Records goes here</p>
+                    <div className="row">
+                            <div className="input-field col m4 s4">
+                                <UploadRecords firstName={this.state.firstName} />
+                            </div>
+                    </div>
 				    </TabPanel>
 
 	        </Tabs>;

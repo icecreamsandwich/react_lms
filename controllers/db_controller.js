@@ -23,7 +23,24 @@ const storage = multer.diskStorage({
 });
 
 const upload = multer({ storage });
-// var upload = multer({ dest: '../public/protected/'});
+
+//storage config for uploading records
+const storageRecords = multer.diskStorage({
+  // destination: '../public/protected/',
+  destination: (req, file, cb) => {
+        /*
+          Files will be saved in the 'public/protected/profile_pics' directory. Make
+          sure this directory already exists!
+        */
+        cb(null, './public/protected/recrds');
+  },
+  filename(req, file, cb) {
+    cb(null, `${file.originalname}`); //-${new Date()}
+  },
+});
+
+const uploadRecords = multer({ storageRecords });
+
 
 var employee = require("../models/employee");
 var EmployeeSchedule = require("../models/employeeSchedule");
@@ -397,10 +414,10 @@ router.post("/sendEmail", function (req, res){
     }
     
     var name = req.body.name
-    var email = req.body.email
     var message = req.body.message
     var maillist = req.body.maillist
-    var content = `name: ${name} \n email: ${email} \n message: ${message} `
+    if(name=="") var content = `message: ${message} `;
+    else var content = `Requester: ${name} \n message: ${message} `;
 
     var transporter = nodemailer.createTransport(transport)
 
@@ -415,7 +432,7 @@ router.post("/sendEmail", function (req, res){
     var mail = {
         from: name,
         to: maillist,  //Change to email address that you want to receive messages on
-        subject: 'Message From React LMS app',
+        subject: 'Piserve Leave Management System Notification',
         text: content
     }
 
@@ -449,6 +466,11 @@ router.post("/fileUpload",upload.single('selectedFile'), function (req, res){
     }
     */
      res.send('File uploaded Successfully');
+});
+
+//Employee Record File upload 
+router.post("/recordFileUpload",uploadRecords.single('recordFile'), function (req, res){
+     res.send('Record uploaded Successfully');
 });
   
 module.exports = router;
