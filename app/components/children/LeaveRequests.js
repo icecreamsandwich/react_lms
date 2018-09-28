@@ -9,15 +9,16 @@ var LeaveRequests = React.createClass({
             firstName: "",
             emp_id: "",
             group_id: "",
+            emp_email : "",
             leaveTitle: "",
             leaveBody: "",
             datetime: "",
             LeaveRequests: [],
             selectedLeaveRequest: [],
             leaveDetails: [],
+            allEmployees: [],
             userEmail: "",
         };
-    // this.leaveFormSubmitHandler = this.leaveFormSubmitHandler.bind(this);
     },
 
      componentDidMount: function() {
@@ -45,7 +46,7 @@ var LeaveRequests = React.createClass({
             if (response !== this.state.allEmployees) {
                 this.setState({ allEmployees: response.data });
             }
-        }.bind(this));
+        }.bind(this));        
     },
 
     leaveClickHandler: function(event) {
@@ -53,6 +54,7 @@ var LeaveRequests = React.createClass({
         //iterate through the leave requests to find the selected leave request
         for (var i = 0; i < this.state.LeaveRequests.length; i++) {
             if (this.state.LeaveRequests[i]._id == event.target.id) {
+                var employeeId = this.state.LeaveRequests[i].emp_id
                     this.setState({
                         firstName: this.state.LeaveRequests[i].firstName,
                         leaveType: this.state.LeaveRequests[i].leaveType,
@@ -63,7 +65,15 @@ var LeaveRequests = React.createClass({
                         selectedLeaveRequest: this.state.LeaveRequests[i]
                     });
             }        
-        }       
+        }  
+
+        //Get the user's email from the employees collection 
+        var filterd_employees = [];
+        filterd_employees = this.state.allEmployees.filter((employees) => 
+                (employees.user_id == employeeId));
+       filterd_employees.map(function(employee,i){
+                 this.setState({userEmail:employee.email})
+        },this);  
     },
 
     leaveFormSubmitHandler: function(event) {
@@ -90,7 +100,7 @@ var LeaveRequests = React.createClass({
             //Send mail back to the employee that leave has been approved
             var maillist  = [];
             maillist.push(this.state.userEmail);
-            helpers.sendMail("",message,maillist).then((response)=>{
+            helpers.sendMail("",this.state.selectedLeaveRequest.leaveBody,maillist).then((response)=>{
                 if (response.data.msg === 'success'){
                     Materialize.toast('Email Sent Successfully', 3000,'green rounded');
                 }else if(response.data.msg === 'fail'){
@@ -101,13 +111,14 @@ var LeaveRequests = React.createClass({
         },
 
     render: function() {
+     /*   var filterd_employees = [];
         //Get the user's email from the employees collection 
-        var filterd_employees = this.state.allEmployees.filter((employee) => 
+        filterd_employees = this.state.allEmployees.filter((employee) => 
                 (employee.emp_id == this.state.selectedLeaveRequest.emp_id));
             filterd_employees.map(function(employeee,i){
                  this.setState({userEmail:employeee.email})
-            }); 
-         var filterd_leave_requests = this.state.LeaveRequests.filter((leaves) => 
+            }); */
+        var filterd_leave_requests = this.state.LeaveRequests.filter((leaves) => 
                 (leaves.approved == false));
         return (
             <div className="row">

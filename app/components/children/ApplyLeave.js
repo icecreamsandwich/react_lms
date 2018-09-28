@@ -11,6 +11,7 @@ var ApplyLeave = React.createClass({
             leaveBody: "",
             datetime: "",
             allLeaves : [],
+            allEmployees : [],
             username: "",
             picture: "",
             user_id:"",
@@ -44,6 +45,7 @@ var ApplyLeave = React.createClass({
                 this.setState({ allEmployees: response.data });
             }
         }.bind(this));
+
     },
 
     handleUserChange(event) {      
@@ -51,6 +53,20 @@ var ApplyLeave = React.createClass({
     },
     
     handleAddForm: function(event) {
+         //select the employees with the same group id and with designation of (Manager | HR )
+        var filteredEmployees = [];
+        var managerEmail = "";
+        var hrEmail = "";
+         filteredEmployees = this.state.allEmployees.filter((employees) => 
+            (employees.designation == 5 || 
+                (employees.designation == 1 && this.state.group_id == employees.team )));
+       /* console.log(filteredEmployees);
+        alert(JSON.stringify(filteredEmployees))*/
+            filteredEmployees.map(function(employee, i) {
+                  if(employee.designation == 1)  managerEmail = employee.email;
+                  else if(employee.designation == 5) hrEmail = employee.email;
+            },this);
+
         event.preventDefault();
         var pickedDate = $(".datepicker").val();
         helpers.addLeave(this.state.user_id, this.state.group_id, this.state.username ,
@@ -60,7 +76,7 @@ var ApplyLeave = React.createClass({
         }.bind(this));
         //Send mail to the manager and HR
         var maillist  = [];
-        maillist.push(this.state.managerEmail,this.state.hrEmail);
+        maillist.push(managerEmail,hrEmail);
         var message = this.state.leaveBody;
        helpers.sendMail(this.state.username,message,maillist).then((response)=>{
             if (response.data.msg === 'success'){
@@ -70,7 +86,7 @@ var ApplyLeave = React.createClass({
             }
         })
         Materialize.toast('Leave Requested Successfully', 3000,'blue rounded');
-        this.clearForm();
+        // this.clearForm();
     },
 
     clearForm: function() {
@@ -88,14 +104,6 @@ var ApplyLeave = React.createClass({
     },
 
     render: function() {
-        //select the employees with the same group id and with designation of (Manager | HR )
-        var filteredEmployees = this.state.allEmployees.filter((employee) => 
-                (this.state.group_id == employee.group_id && 
-                    (employee.designation == 1 ||employee.designation == 5)));
-            filteredEmployees.map(function(employee, i) {
-                  if(employees.designation == 1) this.setState({managerEmail:employee.email});
-                  else if(employees.designation == 5) this.setState({hrEmail:employee.email});
-            });
         return (
             <div className="row">
             <h5>Apply for Leave </h5>

@@ -52,6 +52,12 @@ var ManagerEmployeeAll = React.createClass({
                 this.setState({ leaveDetails: response.data });
             }
         }.bind(this));
+
+        // get formatted date 
+        var today = new Date();
+        var yyyy = today.getFullYear();
+
+        this.setState({currentYear:yyyy,nextYear:yyyy+1});
     },
 
     componentDidUpdate: function(){
@@ -60,13 +66,7 @@ var ManagerEmployeeAll = React.createClass({
           selectMonths: true, // Creates a dropdown to control month
           selectYears: 15 ,// Creates a dropdown of 15 years to control year
           format : "yyyy-mm-dd"
-        });   
-        // get formatted date 
-        var today = new Date();
-        var yyyy = today.getFullYear();
-
-        this.setState({currentYear:yyyy,nextYear:yyyy+1});
-        
+        });     
     },
     
     getEmployees: function() {   
@@ -178,7 +178,7 @@ var ManagerEmployeeAll = React.createClass({
             var filterdleavesDetails = this.state.leaveDetails.filter((leaves) => (leaves.user_id == this.state.emp_user_id ));
             if (this.state.showEmployeeForm){
                 employeeForm = 
-            <Tabs  onSelect={tabIndex => this.setState({ tabIndex })}> {/*selectedIndex={this.state.tabIndex}*/}
+            <Tabs  onSelect= ""> {/*selectedIndex={this.state.tabIndex}*/}
 		        <TabList>
 		          <Tab>Employee Details</Tab>
 		          <Tab>Leave Details</Tab>
@@ -352,7 +352,6 @@ var ManagerEmployeeAll = React.createClass({
                         </form>
 				    </TabPanel>				    
 			        <TabPanel>
-			        <p>Leave details goes here</p>
                 <div className="row">
                     <div className="col s12">
                     <div className="section">
