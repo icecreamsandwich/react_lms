@@ -54,11 +54,10 @@ var UpdateProfile = React.createClass({
     handleUpdateForm: function(event) {
         event.preventDefault();
         
-        helpers.updateEmployee(this.state.selectedEmployee, this.state.firstName, 
+        helpers.updateProfileUser(this.state.user_id, this.state.firstName, 
             this.state.lastName, this.state.addressOne, this.state.addressTwo, 
             this.state.city, this.state.state, this.state.zip, this.state.email, 
-            this.state.phone, this.state.phoneType,
-             this.state.designation,this.state.team, "", "").then(function(response) {
+            this.state.phone, this.state.phoneType).then(function(response) {
         }.bind(this));
         Materialize.toast("Employee updated", 3000);
         this.clearForm();

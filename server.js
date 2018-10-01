@@ -213,7 +213,7 @@
   });
 
   //change password (passport-local-mongoose)
-  app.post('/manager/reset-password', function(req, res, next){
+  /*app.post('/manager/reset-password', function(req, res, next){
     var userid = req.body.userid;
     var oldpassword = req.body.oldpassword;
     var newpassword = req.body.newpassword;
@@ -238,7 +238,7 @@
     },function(err){
         console.error(err);
     })
-  });
+  });*/
  
   /*app.post("/login", passport.authenticate("local", {
     // successRedirect: "/manager",

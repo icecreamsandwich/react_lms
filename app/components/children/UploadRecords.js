@@ -24,7 +24,10 @@ class UploadRecords extends React.Component {
       if(document.getElementById("recordFile").value != "") {
           // you have a file
           var recordFileName = document.getElementById("recordFile").files[0].name;
-        }else recordFileName = "";
+        }else {
+          alert("Please select a file");
+          return false;
+        }
 
       formData.append('recordFileName', recordFileName);
       formData.append('recordFile', recordFile);

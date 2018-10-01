@@ -95,6 +95,7 @@ var LeaveRequests = React.createClass({
                 leaveTypeStr).then(function(response) {
             }.bind(this));
             Materialize.toast('Leave Approved Successfully', 3000,'green rounded');
+            setTimeout(function(){ location.reload() }, 3000);
             this.setState({ showForm: false });
             
             //Send mail back to the employee that leave has been approved

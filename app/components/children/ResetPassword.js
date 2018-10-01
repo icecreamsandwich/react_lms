@@ -1,5 +1,6 @@
 var React = require("react");
 var helpers = require("../utils/helpers");
+var axios = require("axios");
 
 class ResetPassword extends React.Component {
   constructor(props){
@@ -31,13 +32,21 @@ componentDidMount() {
   }
 
   handleLogin(event) {
+    event.preventDefault();
       // just in case we need it
        if(this.state.newpassword !== this.state.confirmpassword){
             Materialize.toast('Passwords do not match', 5000,'red rounded');
-            event.preventDefault();
             return false ;
         }
-       Materialize.toast('Passwod Successfully Reset', 5000,'green rounded');
+
+    helpers.resetPassword(this.state.userid, this.state.oldpassword, this.state.newpassword,
+        this.state.confirmpassword).then((response)=>{
+        if (response.data.msg === 'success'){
+            Materialize.toast('Passwod Successfully Reset', 3000,'green rounded');
+        }else if(response.data.msg === 'fail'){
+            Materialize.toast('Passwod Not Reset'+response.data.msg, 3000,'red rounded');
+        }
+    })
   }
 
 
@@ -52,7 +61,7 @@ componentDidMount() {
                                 <h4 className="blue-text text-darken-1"><img id="logo" src="/assets/images/logo.png"/><span className="hide-on-med-and-down">Reset Password</span></h4>
                             </div>
                         </div>
-                        <form action="/manager/reset-password" method="POST" onSubmit={this.handleLogin}>
+                        <form  onSubmit={this.handleLogin}> {/*action="/manager/reset-password" method="POST"*/}
                             <div className="row">
                                 <div className="col s12">
                                     <input

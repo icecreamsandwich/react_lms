@@ -25,7 +25,7 @@ const creds = require('../mail_config/config');
       destination: (req, file, cb) => {
           
             // Files will be saved in the 'public/protected/profile_pics'
-            cb(null, './public/protected/records');
+            cb(null, './public/protected/profile_pics');
       },
       filename(req, file, cb) {
         cb(null, `${file.originalname}`); //-${new Date()}
@@ -33,6 +33,21 @@ const creds = require('../mail_config/config');
     });
 
     var upload = multer({ storage });
+
+    // this is important because later we'll need to access file path
+    const storageR = multer.diskStorage({
+      // destination: '../public/protected/',
+      destination: (req, file, cb) => {
+          
+            // Files will be saved in the 'public/protected/profile_pics'
+            cb(null, './public/protected/records');
+      },
+      filename(req, file, cb) {
+        cb(null, `${file.originalname}`); //-${new Date()}
+      },
+    });
+
+    var uploadRecord = multer({ storageR });
 
   /* //storage config for uploading records
 const storageRecords = multer.diskStorage({
@@ -303,6 +318,28 @@ router.put("/updateEmployee/:id", function (req, res) {
     });
 });
 
+//Updating profile by the user
+router.put("/updateProfileUser/:id", function (req, res) {
+    employee.findOneAndUpdate({"user_id": req.params.id}, {
+        firstName: req.body.firstName,
+        lastName: req.body.lastName,
+        addressOne: req.body.addressOne,
+        addressTwo: req.body.addressTwo,
+        city: req.body.city,
+        state: req.body.state,
+        zip: req.body.zip,
+        email: req.body.email,
+        phone: req.body.phone,
+        phoneType: req.body.phoneType,
+    }, function (err) {
+        if (err) {
+            console.log(err);
+        } else {
+            res.send("Employee details updated");
+        }
+    });
+});
+
 // Update employee's name in employee schedule collection
 router.put("/updateEmpName/:emp_id", function (req, res) {
     EmployeeSchedule.findOneAndUpdate({"emp_id": req.params.emp_id}, {
@@ -464,7 +501,7 @@ router.post("/fileUpload",upload.single('selectedFile'), function (req, res){
 });
 
 //Employee Record File upload 
-router.post("/recordFileUpload",upload.single('recordFile'), function (req, res){
+router.post("/recordFileUpload",uploadRecord.single('recordFile'), function (req, res){
 //insert record in database
   UserRecords.findOneAndUpdate({"user_id": req.body.userId},{
         // user_id: req.body.userId,
@@ -479,6 +516,34 @@ router.post("/recordFileUpload",upload.single('recordFile'), function (req, res)
         }
     });
      
+});
+//Reset password functionality
+router.post("/resetPassword", function (req, res){
+    var userid = req.body.userid;
+    var oldpassword = req.body.oldpassword;
+    var newpassword = req.body.newpassword;
+    var confirmpassword = req.body.confirmpassword;
+
+    User.findById(userid).then(function(sanitizedUser){
+    if (sanitizedUser){
+        sanitizedUser.setPassword(newpassword, function(){
+            sanitizedUser.save();
+        });
+        res.json({
+            msg: 'success'
+          })
+    } else {
+       res.json({
+            msg: 'fail'
+          })
+    }
+    },function(err){
+        res.json({
+            msg: err
+          })
+        console.error(err);
+    })
+
 });
   
 module.exports = router;

@@ -135,6 +135,23 @@ updateEmpLeaveDetails: function(emp_id, CL, SL, updatedAL, leave_upto_sept , lea
        });
   },
 
+updateProfileUser: function(id, firstName, lastName, addressOne, addressTwo, 
+    city, state, zip, email, phone, phoneType) {
+       return axios.put("/updateProfileUser/" + id, {
+           firstName: firstName,
+           lastName: lastName,
+           addressOne: addressOne,
+           addressTwo: addressTwo,
+           city: city,
+           state: state,
+           zip: zip,
+           email: email,
+           phone: phone,
+           phoneType: phoneType,
+       });
+  },
+
+
   updateEmpName: function(emp_id, firstName, lastName)  {
     return axios.put("/updateEmpName/" + emp_id, {
         firstName: firstName,
@@ -194,6 +211,16 @@ updateEmpLeaveDetails: function(emp_id, CL, SL, updatedAL, leave_upto_sept , lea
         name: name,
         message: message,
         maillist: maillist
+      });
+    },
+
+//Reset password functionality
+    resetPassword:function(userId, oldpassword, newpassword, confirmpassword) {
+      return axios.post('/resetPassword', {
+        userid: userId,
+        oldpassword: oldpassword,
+        newpassword: newpassword,
+        confirmpassword: confirmpassword
       });
     },
 };
