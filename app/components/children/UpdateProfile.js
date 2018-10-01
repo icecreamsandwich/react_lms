@@ -1,11 +1,8 @@
 var React = require("react");
 var ReactDOM = require('react-dom');
 var helpers = require("../utils/helpers");
-var SimpleReactFileUpload =  require("./SimpleReactFileUpload");
-var UploadRecords =  require("./UploadRecords");
-var {Tab,Tabs,TabList,TabPanel} = require("react-tabs");
 
-var ManagerEmployeeAll = React.createClass({
+var UpdateProfile = React.createClass({
     getInitialState: function() {
         return {
             firstName: "",
@@ -22,51 +19,14 @@ var ManagerEmployeeAll = React.createClass({
             team: "",
             emp_user_id : "",
             allEmployees: [],
-            leaveDetails: [],
-            selectedEmployee: "",
-            emp_id: "" ,  
-            group_id: "" ,  
-            design_id: "" ,
-            doj: "",
-            showEmployeeForm : false,
-            employeeForm :"",
-            selectedFile : "",
-            tabIndex : 0
         };
     },
 
-    componentDidMount: function() {
-        helpers.getCurrentUser().then(function(response) {
-          if (response !== this.state.username) {
-            this.setState({ user_id: response.data._id, 
-                group_id: response.data.groupId,
-                design_id: response.data.designationId,
-                user_type: response.data.userType,
-                picture: response.data.picture, 
-            });
-          }
-        }.bind(this)); 
+    componentDidMount: function() {       
         this.getEmployees();  
-        helpers.getAllleaveDetails().then(function(response) {
-            if (response !== this.state.leaveDetails) {
-                this.setState({ leaveDetails: response.data });
-            }
-        }.bind(this));
-
-        // get formatted date 
-        var today = new Date();
-        var yyyy = today.getFullYear();
-
-        this.setState({currentYear:yyyy,nextYear:yyyy+1});
     },
 
-    componentDidUpdate: function(){
-         //Apply date picker to the Leave day field
-        $('.datepicker').pickadate({
-          selectMonths: true, // Creates a dropdown to control month
-          selectYears: 15 ,// Creates a dropdown of 15 years to control year
-          format : "yyyy-mm-dd"
-        });     
+    componentDidUpdate: function(){   
     },
     
     getEmployees: function() {   
@@ -84,65 +44,17 @@ var ManagerEmployeeAll = React.createClass({
 
     handleUpdateForm: function(event) {
         event.preventDefault();
-        //get the selected filename 
-        if(document.getElementById("fileInput").value != "") {
-          // you have a file
-          var profilePic = document.getElementById("fileInput").files[0].name;
-        }else profilePic = "";
         
-        var pickedDate = $(".datepicker").val();
         helpers.updateEmployee(this.state.selectedEmployee, this.state.firstName, 
             this.state.lastName, this.state.addressOne, this.state.addressTwo, 
             this.state.city, this.state.state, this.state.zip, this.state.email, 
             this.state.phone, this.state.phoneType,
-             this.state.designation,this.state.team, pickedDate, profilePic).then(function(response) {
+             this.state.designation,this.state.team, "", "").then(function(response) {
         }.bind(this));
-
-        helpers.updateEmpTeam(this.state.emp_user_id, this.state.team, 
-            this.state.designation, profilePic).then(function(response) {
-        }.bind(this));
-
         Materialize.toast("Employee updated", 3000);
         this.clearForm();
         this.getEmployees();       
    },
-
-
-    clickEmployee: function(event) {
-        this.setState({selectedEmployee: event.target.id}, function() {
-            for (var i = 0; i < this.state.allEmployees.length; i++) {
-                if (this.state.allEmployees[i]._id == this.state.selectedEmployee) {
-                    this.setState({
-                        firstName: this.state.allEmployees[i].firstName,
-                        lastName: this.state.allEmployees[i].lastName,
-                        addressOne: this.state.allEmployees[i].addressOne,
-                        addressTwo: this.state.allEmployees[i].addressTwo,
-                        city: this.state.allEmployees[i].city,
-                        state: this.state.allEmployees[i].state,
-                        zip: this.state.allEmployees[i].zip,
-                        email: this.state.allEmployees[i].email,
-                        phone: this.state.allEmployees[i].phone,
-                        phoneType: this.state.allEmployees[i].phoneType,
-                        designation: this.state.allEmployees[i].designation,
-                        team: this.state.allEmployees[i].team,
-                        doj: this.state.allEmployees[i].doj,
-                        profile_pic: this.state.allEmployees[i].profile_pic,
-                        emp_user_id: this.state.allEmployees[i].user_id,
-                        emp_id: this.state.selectedEmployee
-                    });
-                    this.activeButtons();
-                }
-            }
-        });
-        this.setState({ showEmployeeForm: true });
-    },
-
-    newEmployee: function() {
-        this.clearForm();
-        this.clearStates();
-        this.activeButtons();
-    },
-
     clearForm: function() {
         var elements = document.getElementsByTagName("input");       
         for (var i=0; i < elements.length; i++) {
@@ -162,30 +74,14 @@ var ManagerEmployeeAll = React.createClass({
     },
 
     render: function() {
-        let employeeForm= "";
-        {
-            if(this.state.user_type=="su"){
-                var filterd_employees = this.state.allEmployees;
-            }
-            else if(this.state.group_id == 6 && 
-                (this.state.design_id == 5 || this.state.design_id == 6 || this.state.design_id == 7)){
-                var filterd_employees = this.state.allEmployees;
-            }else{
-                var filterd_employees = this.state.allEmployees.filter((employees) => (employees.team == this.state.group_id &&
-                  employees.user_id != this.state.user_id ) );
-            }         
-            //Get all leaved filtered by CL,SL and AL 
-            var filterdleavesDetails = this.state.leaveDetails.filter((leaves) => (leaves.user_id == this.state.emp_user_id ));
-            if (this.state.showEmployeeForm){
-                employeeForm = 
-            <Tabs  onSelect= ""> {/*selectedIndex={this.state.tabIndex}*/}
-		        <TabList>
-		          <Tab>Employee Details</Tab>
-		          <Tab>Leave Details</Tab>
-		          <Tab>Employee Records</Tab>
-		        </TabList>
-		            <TabPanel>
-		            <form className="col m12" onSubmit={this.handleAddForm} id="employeeForm">
+                var filterd_employees = this.state.allEmployees.filter((employees) => 
+                    (employees.user_id != this.state.user_id ));      	                   
+        return (  
+            {filterd_employees.map(function(employee, i) {
+        return (
+            <div className="row">
+                <div className="col s12">
+                    <form className="col m12" onSubmit={this.handleAddForm} id="employeeForm">
                             <div className="row">
                                 <div className="input-field col m6 s12">
                                     <input
@@ -193,7 +89,7 @@ var ManagerEmployeeAll = React.createClass({
                                         name="firstName"
                                         type="text"
                                         className="validate"
-                                        value={this.state.firstName}
+                                        value={employee.firstName}
                                         onChange={this.handleUserChange}
                                         required />
                                 </div>
@@ -203,7 +99,7 @@ var ManagerEmployeeAll = React.createClass({
                                         name="lastName"
                                         type="text"
                                         className="validate"
-                                        value={this.state.lastName}
+                                        value={employee.lastName}
                                         onChange={this.handleUserChange}
                                         required />
                                 </div>
@@ -215,7 +111,7 @@ var ManagerEmployeeAll = React.createClass({
                                         name="addressOne"
                                         type="text"
                                         className="validate"
-                                        value={this.state.addressOne}
+                                        value={employee.addressOne}
                                         onChange={this.handleUserChange}
                                         required />
                                 </div>
@@ -227,7 +123,7 @@ var ManagerEmployeeAll = React.createClass({
                                         name="addressTwo"
                                         type="text"
                                         className="validate"
-                                        value={this.state.addressTwo}
+                                        value={employee.addressTwo}
                                         onChange={this.handleUserChange} />
                                 </div>
                             </div>
@@ -238,7 +134,7 @@ var ManagerEmployeeAll = React.createClass({
                                         name="city"
                                         type="text"
                                         className="validate"
-                                        value={this.state.city}
+                                        value={employee.city}
                                         onChange={this.handleUserChange}
                                         required />
                                 </div>
@@ -257,7 +153,7 @@ var ManagerEmployeeAll = React.createClass({
                                         name="zip"
                                         type="number"
                                         className="validate"
-                                        value={this.state.zip}
+                                        value={employee.zip}
                                         onChange={this.handleUserChange}
                                         required />
                                 </div>
@@ -269,7 +165,7 @@ var ManagerEmployeeAll = React.createClass({
                                         name="email"
                                         type="email"
                                         className="validate"
-                                        value={this.state.email}
+                                        value={this.employee.email}
                                         onChange={this.handleUserChange}
                                         required />
                                 </div>
@@ -279,7 +175,7 @@ var ManagerEmployeeAll = React.createClass({
                                         name="doj"
                                         type="text"
                                         className="validate datepicker"
-                                        value={this.state.doj}
+                                        value={this.employee.doj}
                                         onChange={this.handleUserChange}
                                         required />
                                 </div>
@@ -291,7 +187,7 @@ var ManagerEmployeeAll = React.createClass({
                                         name="phone"
                                         type="number"
                                         className="validate"
-                                        value={this.state.phone}
+                                        value={this.employee.phone}
                                         onChange={this.handleUserChange}
                                         required />
                                 </div>
@@ -306,7 +202,7 @@ var ManagerEmployeeAll = React.createClass({
                             </div>
                          <div className="row">
                               <div className="input-field col m8 s8">
-                                <select className="browser-default" name="designation" value={this.state.designation} onChange={this.handleUserChange} required>
+                                <select className="browser-default" name="designation" value={this.employee.designation} onChange={this.handleUserChange} required>
                                   <option value="" disabled>Designation</option>
                                   <option value="1">Manager</option>
                                   <option value="2">Team Leader</option>
@@ -320,7 +216,7 @@ var ManagerEmployeeAll = React.createClass({
                                 </select>
                               </div>
                               <div className="input-field col m4 s4">
-                                <select className="browser-default" name="team" value={this.state.team} onChange={this.handleUserChange} required>
+                                <select className="browser-default" name="team" value={this.employee.team} onChange={this.handleUserChange} required>
                                   <option value="" disabled>Team</option>
                                   <option value="1">QHO</option>
                                   <option value="2">ADNET</option>
@@ -330,11 +226,6 @@ var ManagerEmployeeAll = React.createClass({
                                   <option value="6">Piserve</option>
                                 </select>
                               </div>
-                          </div>
-                          <div className="row">
-                            <div className="input-field col m4 s4">
-                                <SimpleReactFileUpload firstName={this.state.firstName} />
-                            </div>
                           </div>
 
                             <div className="row">
@@ -350,101 +241,12 @@ var ManagerEmployeeAll = React.createClass({
                                 </div>
                             </div>
                         </form>
-				    </TabPanel>				    
-			        <TabPanel>
-                <div className="row">
-                    <div className="col s12">
-                    <div className="section">
-                        <h5>Leave Remaining ({this.state.currentYear}-{this.state.nextYear})</h5>
-                        <table className="bordered highlight striped">
-                            <thead>
-                                <tr>
-                                    <th data-field="name">CL</th>
-                                    <th data-field="name">SL</th>
-                                    <th data-field="name">Total AL</th>
-                                    <th data-field="name">AL upto September</th>
-                                    <th data-field="name">AL Sept-march</th>
-                                    <th data-field="name">LOP</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {filterdleavesDetails.map(function(leavedetail, i) {
-                                return (
-                                    <tr key={i}>
-                                        <td className="fullName">
-                                            {leavedetail.CL}
-                                        </td>
-                                        <td className="schedule">
-                                            {leavedetail.SL}
-                                        </td>
-                                        <td>
-                                            {leavedetail.AL}
-                                        </td>
-                                        <td>
-                                            {leavedetail.Al_upto_sept}
-                                        </td>
-                                        <td>
-                                            {leavedetail.Al_sept_to_march}
-                                        </td>
-                                        <td>
-                                            {leavedetail.LOP}
-                                        </td>
-                                    </tr>
-                                );
-                            }, this)}
-                            </tbody>
-                        </table>
-                    </div>
                     </div>
                 </div>
-				    </TabPanel>
-
-				    <TabPanel>
-                    <div className="row">
-                            <div className="input-field col m4 s4">
-                                <UploadRecords firstName={this.state.firstName} userId={this.state.user_id} />
-                            </div>
-                    </div>
-				    </TabPanel>
-
-	        </Tabs>;
-
-                
-            }
-            else{
-                employeeForm = "";
-            }
-        }           
-        return (            
-            <div className="row">
-                <div className="col m3">
-                    <table className="highlight" id="allEmployees">
-                        <thead>
-                            <tr>
-                                <th data-field="name">Employees</th>
-                            </tr>
-                        </thead>
-                        <tbody>                        
-                            {filterd_employees.map(function(ManagerEmployeeAll, i) {
-                                return (
-                                    <tr key={i}>
-                                        <td className="employeeList" onClick={this.clickEmployee} id={ManagerEmployeeAll._id}>
-                                            {ManagerEmployeeAll.firstName} {ManagerEmployeeAll.lastName}
-                                        </td>
-                                    </tr>
-                                );
-                            }, this)}
-                        </tbody>
-                    </table>
-                </div>
-                <div className="col m9">
-                    <div className="row">
-                        {employeeForm}
-                    </div>
-                </div>       
-            </div>
-        );
-    }
+            );
+        }, this)}        
+    );
+  }
 });
 
-module.exports = ManagerEmployeeAll;
+module.exports = UpdateProfile;

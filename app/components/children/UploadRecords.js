@@ -1,6 +1,7 @@
 var React = require("react");
 var helpers = require("../utils/helpers");
 var axios = require("axios");
+var RecordDetails =  require("./RecordDetails");
 
 class UploadRecords extends React.Component {
 
@@ -19,8 +20,14 @@ class UploadRecords extends React.Component {
       const {recordFile, firstName } = this.state;
       let formData = new FormData();
       
-      formData.append('recordFile', recordFile);
+      if(document.getElementById("fileInput").value != "") {
+          // you have a file
+          var recordFile1 = document.getElementById("recordFile").files[0].name;
+        }else recordFile1 = "";
+
+      formData.append('recordFile', recordFile1);
       formData.append('firstName', this.props.firstName);
+      formData.append('userId', this.props.userId);
 
       const config = {
         headers: {
@@ -43,6 +50,7 @@ class UploadRecords extends React.Component {
         <input type="file" id="recordFile" name="recordFile" onChange={this.onChange} />
         <button type="submit">Upload</button>
       </form>
+      <RecordDetails />
    )
   }
 }

@@ -32,7 +32,7 @@ const storageRecords = multer.diskStorage({
           Files will be saved in the 'public/protected/profile_pics' directory. Make
           sure this directory already exists!
         */
-        cb(null, './public/protected/recrds');
+        cb(null, './public/protected/records');
   },
   filename(req, file, cb) {
     cb(null, `${file.originalname}`); //-${new Date()}
@@ -49,6 +49,7 @@ var misc = require("../models/misc");
 var Leave = require("../models/leaverequests");
 var LeaveDetails = require("../models/leavedetails");
 var User = require("../models/user");
+var UserRecords = require("../models/userrecords");
 
 //NodeMailer configurations//
 const creds = require('../mail_config/config');
@@ -81,6 +82,18 @@ router.get("/getAllEmployees", function (req, res) {
 //Getting All Employees leave details
 router.get("/getAllLeaveDetails", function (req, res) {
     LeaveDetails.find().exec(function (err, doc) {
+        if (err) {
+            console.log(err);
+        }
+        else {
+            res.send(doc);
+        }
+    });
+});
+
+//Get All the user records
+router.get("/getAllUserRecords", function (req, res) {
+    UserRecords.find().exec(function (err, doc) {
         if (err) {
             console.log(err);
         }
@@ -470,6 +483,19 @@ router.post("/fileUpload",upload.single('selectedFile'), function (req, res){
 
 //Employee Record File upload 
 router.post("/recordFileUpload",uploadRecords.single('recordFile'), function (req, res){
+//insert record in database
+  UserRecords.create({
+        user_id: req.param.userId,
+        user_record: req.param.recordFile,
+    }, function (err, doc) {
+        if (err) {
+            console.log(err);
+        }
+        else {
+            //Send leave request mail to the manager and HR 
+            res.send(doc);
+        }
+    });
      res.send('Record uploaded Successfully');
 });
   

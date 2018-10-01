@@ -94,6 +94,13 @@ var helper = {
         return response;
     })
   },
+  //Get all user records
+  getAllUserRecords: function() {
+    return axios.get('/getAllUserRecords')
+    .then(function(response){
+        return response;
+    })
+  },
 
 //Update employee leave details on new financial Year
 updateEmpLeaveDetails: function(emp_id, CL, SL, updatedAL, leave_upto_sept , leave_sept_march)  {
