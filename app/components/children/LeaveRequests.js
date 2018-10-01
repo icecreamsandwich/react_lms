@@ -99,8 +99,9 @@ var LeaveRequests = React.createClass({
             
             //Send mail back to the employee that leave has been approved
             var maillist  = [];
+            var leaveBody = "Your leave has been successfully approved";
             maillist.push(this.state.userEmail);
-            helpers.sendMail("",this.state.selectedLeaveRequest.leaveBody,maillist).then((response)=>{
+            helpers.sendMail("",leaveBody,maillist).then((response)=>{
                 if (response.data.msg === 'success'){
                     Materialize.toast('Email Sent Successfully', 3000,'green rounded');
                 }else if(response.data.msg === 'fail'){

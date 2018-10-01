@@ -36,6 +36,7 @@ var Employee = React.createClass({
         return (
             <div>
                 <ul id="dropdown1" className="dropdown-content">
+                    <li><a className="black-text" href="/employee/update-profile">Update Profile</a></li>
                     <li><a className="black-text" href="/logout">Logout<i className="material-icons right">exit_to_app</i></a></li>
                 </ul>
                 <ul id="dropdown2" className="dropdown-content">

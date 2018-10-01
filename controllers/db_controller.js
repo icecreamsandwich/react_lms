@@ -7,41 +7,6 @@ var fs  = require('fs');
 //file uploading using multer
 var multer = require('multer');
 
-// this is important because later we'll need to access file path
-const storage = multer.diskStorage({
-  // destination: '../public/protected/',
-  destination: (req, file, cb) => {
-        /*
-          Files will be saved in the 'public/protected/profile_pics' directory. Make
-          sure this directory already exists!
-        */
-        cb(null, './public/protected/profile_pics');
-  },
-  filename(req, file, cb) {
-    cb(null, `${file.originalname}`); //-${new Date()}
-  },
-});
-
-const upload = multer({ storage });
-
-//storage config for uploading records
-const storageRecords = multer.diskStorage({
-  // destination: '../public/protected/',
-  destination: (req, file, cb) => {
-        /*
-          Files will be saved in the 'public/protected/profile_pics' directory. Make
-          sure this directory already exists!
-        */
-        cb(null, './public/protected/records');
-  },
-  filename(req, file, cb) {
-    cb(null, `${file.originalname}`); //-${new Date()}
-  },
-});
-
-const uploadRecords = multer({ storageRecords });
-
-
 var employee = require("../models/employee");
 var EmployeeSchedule = require("../models/employeeSchedule");
 var announcements = require("../models/announcements");
@@ -53,6 +18,37 @@ var UserRecords = require("../models/userrecords");
 
 //NodeMailer configurations//
 const creds = require('../mail_config/config');
+
+// this is important because later we'll need to access file path
+    const storage = multer.diskStorage({
+      // destination: '../public/protected/',
+      destination: (req, file, cb) => {
+          
+            // Files will be saved in the 'public/protected/profile_pics'
+            cb(null, './public/protected/records');
+      },
+      filename(req, file, cb) {
+        cb(null, `${file.originalname}`); //-${new Date()}
+      },
+    });
+
+    var upload = multer({ storage });
+
+  /* //storage config for uploading records
+const storageRecords = multer.diskStorage({
+  destination: (req, file, cb) => {
+        
+          Files will be saved in the 'public/protected/records' directory. Make
+          sure this directory already exists!
+        
+        cb(null, './public/protected/records');
+  },
+  filename(req, file, cb) {
+    cb(null, `${file.originalname}`);
+  },
+});
+
+var upload = multer({ storageRecords });*/
 
 //Getting Employees based on condition from the database
 router.get("/getCurrentEmployeeDetails/:empId", function (req, res) {
@@ -464,39 +460,25 @@ router.post("/sendEmail", function (req, res){
 
 //File uploading 
 router.post("/fileUpload",upload.single('selectedFile'), function (req, res){
-    //unlink the existing profile pic(if existas) from the public/protected folder
-    /*fs.stat("./public/protected/profile_pics/"+req.file.profile_pic, function(err, stat) {
-    if(err == null) {
-        console.log('File exists');
-    } else{
-        fs.unlink("./public/protected/profile_pics/"+req.file.profile_pic, (err) => {
-            if (err) {
-                console.log("failed to delete local image:"+err);
-            } else {
-                console.log('successfully deleted local image');                                
-            }
-        });
-    }
-    */
-     res.send('File uploaded Successfully');
+    res.send('File uploaded Successfully');
 });
 
 //Employee Record File upload 
-router.post("/recordFileUpload",uploadRecords.single('recordFile'), function (req, res){
+router.post("/recordFileUpload",upload.single('recordFile'), function (req, res){
 //insert record in database
-  UserRecords.create({
-        user_id: req.param.userId,
-        user_record: req.param.recordFile,
+  UserRecords.findOneAndUpdate({"user_id": req.body.userId},{
+        // user_id: req.body.userId,
+        user_record: req.body.recordFileName,
+        record_type: req.body.recordType,
     }, function (err, doc) {
         if (err) {
             console.log(err);
         }
         else {
-            //Send leave request mail to the manager and HR 
-            res.send(doc);
+            res.send('Record uploaded Successfully');
         }
     });
-     res.send('Record uploaded Successfully');
+     
 });
   
 module.exports = router;

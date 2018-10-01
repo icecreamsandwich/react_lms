@@ -35,7 +35,7 @@ var RecordDetails = React.createClass({
     render: function() {
         {             
             //Get all leaved filtered by CL,SL and AL 
-            var filterdUserRecords = this.state.UserRecords.filter((records) => (records.user_id == this.state.user_id ));
+            var filterdUserRecords = this.state.UserRecords.filter((records) => (records.user_id == this.props.userId ));
         }   
         return (
             <div className="row">
@@ -47,6 +47,7 @@ var RecordDetails = React.createClass({
                                 <tr>
                                     <th data-field="name">Userid</th>
                                     <th data-field="name">Record</th>
+                                    <th data-field="name">Record Type</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -58,6 +59,9 @@ var RecordDetails = React.createClass({
                                         </td>
                                         <td className="schedule">
                                             {record.user_record}
+                                        </td>
+                                        <td className="schedule">
+                                            {record.record_type}
                                         </td>
                                     </tr>
                                 );

@@ -16,6 +16,7 @@
   var User = require("./models/user")
   var employee = require("./models/employee");
   var leavedetails = require("./models/leavedetails");
+  var userrecords = require("./models/userrecords");
 
 
 //Initialize Express
@@ -181,6 +182,11 @@
                 user_id : user._id,
              }, function(req, res) {         
           });  
+          //Add details to user records collection
+          userrecords.create({
+                user_id : user._id,
+             }, function(req, res) {         
+          });  
            res.redirect("/");   
        });
       }
@@ -196,7 +202,7 @@
       }
       if (!user) {
         // *** Display message without using flash option
-        res.redirect("/");
+        return res.redirect("/");
          // return res.sendFile(path.resolve(__dirname, "public", "notauth.html"))
         }
       req.logIn(user, function(err) {

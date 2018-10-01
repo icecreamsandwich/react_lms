@@ -21,6 +21,7 @@ var LeavePolicy = require("../components/children/LeavePolicy");
 var LeaveDetails = require("../components/children/LeaveDetails");
 var ContactForm = require("../components/children/ContactForm");
 var ResetPassword = require("../components/children/ResetPassword");
+var UpdateProfile = require("../components/children/UpdateProfile");
 var SimpleReactFileUpload = require("../components/children/SimpleReactFileUpload");
 
 // employee components
@@ -51,6 +52,7 @@ module.exports = (
             <Route path="applyleave" component={ApplyLeave} />
             <Route path="leavePolicy" component={LeavePolicy} />
             <Route path="leaveDetails" component={LeaveDetails} />
+            <Route path="update-profile" component={UpdateProfile} />
             <IndexRoute component={EmployeeHome} />
         </Route>
     </Route>

@@ -109,6 +109,10 @@ var ManagerEmployeeAll = React.createClass({
 
 
     clickEmployee: function(event) {
+        //resetting the td background color and highlight the selected td
+        $("table tr").css("background-color","")
+        $("#"+event.target.id).parent().css("background-color","#b1b9c6")
+
         this.setState({selectedEmployee: event.target.id}, function() {
             for (var i = 0; i < this.state.allEmployees.length; i++) {
                 if (this.state.allEmployees[i]._id == this.state.selectedEmployee) {
@@ -131,6 +135,7 @@ var ManagerEmployeeAll = React.createClass({
                         emp_id: this.state.selectedEmployee
                     });
                     this.activeButtons();
+                    this.clearForm();
                 }
             }
         });
@@ -146,7 +151,7 @@ var ManagerEmployeeAll = React.createClass({
     clearForm: function() {
         var elements = document.getElementsByTagName("input");       
         for (var i=0; i < elements.length; i++) {
-            if ((elements[i].type == "text") || (elements[i].type == "number") || (elements[i].type == "email")) {
+            if ((elements[i].type == "file") || (elements[i].type == "text") || (elements[i].type == "number") || (elements[i].type == "email")) {
                 elements[i].value = "";
                 elements[i].classList.remove("valid");
             }
@@ -244,7 +249,7 @@ var ManagerEmployeeAll = React.createClass({
                                 </div>
                                 <div className="input-field col m3 s6">
                                     <select className="browser-default" name="state" value={this.state.state} onChange={this.handleUserChange} required>
-                                        <option value="" disabled>State</option>
+                                        <option value="State" disabled>State</option>
                                         <option value="AL">AL</option>
                                         <option value="AK">AK</option>
                                         <option value="AZ">AZ</option>
@@ -297,7 +302,7 @@ var ManagerEmployeeAll = React.createClass({
                                 </div>
                                 <div className="input-field col m4 s4">
                                     <select className="browser-default" name="phoneType" value={this.state.phoneType} onChange={this.handleUserChange} required>
-                                        <option value="" disabled>Phone Type</option>
+                                        <option value="phoneType" disabled>Phone Type</option>
                                         <option value="mobile">Mobile</option>
                                         <option value="work">Work</option>
                                         <option value="home">Home</option>
@@ -307,7 +312,7 @@ var ManagerEmployeeAll = React.createClass({
                          <div className="row">
                               <div className="input-field col m8 s8">
                                 <select className="browser-default" name="designation" value={this.state.designation} onChange={this.handleUserChange} required>
-                                  <option value="" disabled>Designation</option>
+                                  <option value="Designation" disabled>Designation</option>
                                   <option value="1">Manager</option>
                                   <option value="2">Team Leader</option>
                                   <option value="3">Developer</option>
@@ -321,7 +326,7 @@ var ManagerEmployeeAll = React.createClass({
                               </div>
                               <div className="input-field col m4 s4">
                                 <select className="browser-default" name="team" value={this.state.team} onChange={this.handleUserChange} required>
-                                  <option value="" disabled>Team</option>
+                                  <option value="Team" disabled>Team</option>
                                   <option value="1">QHO</option>
                                   <option value="2">ADNET</option>
                                   <option value="3">HN</option>
@@ -333,7 +338,7 @@ var ManagerEmployeeAll = React.createClass({
                           </div>
                           <div className="row">
                             <div className="input-field col m4 s4">
-                                <SimpleReactFileUpload firstName={this.state.firstName} />
+                                <SimpleReactFileUpload firstName={this.state.user_id} />
                             </div>
                           </div>
 
@@ -402,7 +407,7 @@ var ManagerEmployeeAll = React.createClass({
 				    <TabPanel>
                     <div className="row">
                             <div className="input-field col m4 s4">
-                                <UploadRecords firstName={this.state.firstName} userId={this.state.user_id} />
+                                <UploadRecords firstName={this.state.user_id} userId={this.state.emp_user_id} />
                             </div>
                     </div>
 				    </TabPanel>

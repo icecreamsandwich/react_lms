@@ -22,7 +22,16 @@ var UpdateProfile = React.createClass({
         };
     },
 
-    componentDidMount: function() {       
+    componentDidMount: function() {    
+        //Get current user details 
+        helpers.getCurrentUser().then(function(response) {
+          if (response !== this.state.username) {
+            this.setState({ user_id: response.data._id, 
+                group_id: response.data.groupId,
+                design_id: response.data.designationId
+            });
+          }
+        }.bind(this));   
         this.getEmployees();  
     },
 
@@ -30,7 +39,7 @@ var UpdateProfile = React.createClass({
     },
     
     getEmployees: function() {   
-        helpers.getAllEmployees(this.state.group_id).then(function(response) {
+        helpers.getAllEmployees().then(function(response) {
             if (response !== this.state.allEmployees) {
                 this.setState({ allEmployees: response.data });
                 this.activeButtons();
@@ -74,14 +83,18 @@ var UpdateProfile = React.createClass({
     },
 
     render: function() {
-                var filterd_employees = this.state.allEmployees.filter((employees) => 
-                    (employees.user_id != this.state.user_id ));      	                   
+        var filterd_employee = [];
+        if(this.state.user_id){
+             filterd_employee = this.state.allEmployees.filter((employees) => 
+                    (employees.user_id == this.state.user_id )); 
+        } 
         return (  
-            {filterd_employees.map(function(employee, i) {
-        return (
             <div className="row">
                 <div className="col s12">
-                    <form className="col m12" onSubmit={this.handleAddForm} id="employeeForm">
+                {
+                    filterd_employee.map(function(employee, i) {
+                    return (
+                    <form className="col m12" onSubmit={this.handleAddForm} id="employeeForm" key={i}>
                             <div className="row">
                                 <div className="input-field col m6 s12">
                                     <input
@@ -139,8 +152,8 @@ var UpdateProfile = React.createClass({
                                         required />
                                 </div>
                                 <div className="input-field col m3 s6">
-                                    <select className="browser-default" name="state" value={this.state.state} onChange={this.handleUserChange} required>
-                                        <option value="" disabled>State</option>
+                                    <select className="browser-default" name="state" value={employee.state} onChange={this.handleUserChange} required>
+                                        <option value="State" disabled>State</option>
                                         <option value="AL">AL</option>
                                         <option value="AK">AK</option>
                                         <option value="AZ">AZ</option>
@@ -165,17 +178,7 @@ var UpdateProfile = React.createClass({
                                         name="email"
                                         type="email"
                                         className="validate"
-                                        value={this.employee.email}
-                                        onChange={this.handleUserChange}
-                                        required />
-                                </div>
-                                <div className="input-field col m6 s6">
-                                    <input
-                                        placeholder="Date of Join"
-                                        name="doj"
-                                        type="text"
-                                        className="validate datepicker"
-                                        value={this.employee.doj}
+                                        value={employee.email}
                                         onChange={this.handleUserChange}
                                         required />
                                 </div>
@@ -187,46 +190,19 @@ var UpdateProfile = React.createClass({
                                         name="phone"
                                         type="number"
                                         className="validate"
-                                        value={this.employee.phone}
+                                        value={employee.phone}
                                         onChange={this.handleUserChange}
                                         required />
                                 </div>
                                 <div className="input-field col m4 s4">
-                                    <select className="browser-default" name="phoneType" value={this.state.phoneType} onChange={this.handleUserChange} required>
-                                        <option value="" disabled>Phone Type</option>
+                                    <select className="browser-default" name="phoneType" value={employee.phoneType} onChange={this.handleUserChange} required>
+                                        <option value="Phone Type" disabled>Phone Type</option>
                                         <option value="mobile">Mobile</option>
                                         <option value="work">Work</option>
                                         <option value="home">Home</option>
                                     </select>
                                 </div>                                
                             </div>
-                         <div className="row">
-                              <div className="input-field col m8 s8">
-                                <select className="browser-default" name="designation" value={this.employee.designation} onChange={this.handleUserChange} required>
-                                  <option value="" disabled>Designation</option>
-                                  <option value="1">Manager</option>
-                                  <option value="2">Team Leader</option>
-                                  <option value="3">Developer</option>
-                                  <option value="4">Support Engineer</option>
-                                  <option value="8">Designer</option>
-                                  <option value="9">SEO Specialist</option>
-                                  <option value="5">HR</option>
-                                  <option value="6">CEO</option>
-                                  <option value="7">CTO</option>
-                                </select>
-                              </div>
-                              <div className="input-field col m4 s4">
-                                <select className="browser-default" name="team" value={this.employee.team} onChange={this.handleUserChange} required>
-                                  <option value="" disabled>Team</option>
-                                  <option value="1">QHO</option>
-                                  <option value="2">ADNET</option>
-                                  <option value="3">HN</option>
-                                  <option value="4">Vodafone</option>
-                                  <option value="5">365andUP</option>
-                                  <option value="6">Piserve</option>
-                                </select>
-                              </div>
-                          </div>
 
                             <div className="row">
                                 <div className="col s4">
@@ -234,19 +210,14 @@ var UpdateProfile = React.createClass({
                                         <i className="material-icons right">edit</i>
                                     </a>
                                 </div>
-                                <div className="col s4">
-                                    <a id="removeEmployee" className="btn btn-large waves-effect waves-light red accent-3" onClick={this.handleRemoveForm}>Remove
-                                        <i className="material-icons right">person_outline</i>
-                                    </a>
-                                </div>
                             </div>
                         </form>
+                        )
+                        }, this)}
                     </div>
                 </div>
             );
-        }, this)}        
-    );
-  }
+        }
 });
 
 module.exports = UpdateProfile;
