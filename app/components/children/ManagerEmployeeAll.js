@@ -95,7 +95,7 @@ var ManagerEmployeeAll = React.createClass({
             this.state.lastName, this.state.addressOne, this.state.addressTwo, 
             this.state.city, this.state.state, this.state.zip, this.state.email, 
             this.state.phone, this.state.phoneType,
-             this.state.designation,this.state.team, pickedDate, profilePic).then(function(response) {
+             this.state.designation, this.state.team, pickedDate, profilePic).then(function(response) {
         }.bind(this));
 
         helpers.updateEmpTeam(this.state.emp_user_id, this.state.team, 
@@ -170,15 +170,15 @@ var ManagerEmployeeAll = React.createClass({
         let employeeForm= "";
         {
             if(this.state.user_type=="su"){
-                var filterd_employees = this.state.allEmployees;
+                 var filterd_employees = this.state.allEmployees;
             }
             else if(this.state.group_id == 6 && 
                 (this.state.design_id == 5 || this.state.design_id == 6 || this.state.design_id == 7)){
-                var filterd_employees = this.state.allEmployees;
-            }else{
-                var filterd_employees = this.state.allEmployees.filter((employees) => (employees.team == this.state.group_id &&
-                  employees.user_id != this.state.user_id ) );
-            }         
+                 var filterd_employees = this.state.allEmployees;
+            }else if(this.state.design_id == 1){
+                    var filterd_employees = this.state.allEmployees.filter((employees) => 
+                    (employees.team == this.state.group_id && employees.user_id != this.state.user_id ));
+            }else filterd_employees = [];
             //Get all leaved filtered by CL,SL and AL 
             var filterdleavesDetails = this.state.leaveDetails.filter((leaves) => (leaves.user_id == this.state.emp_user_id ));
             if (this.state.showEmployeeForm){

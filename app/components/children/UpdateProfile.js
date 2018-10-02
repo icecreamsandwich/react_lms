@@ -15,8 +15,6 @@ var UpdateProfile = React.createClass({
             email: "",
             phone: "",
             phoneType: "",
-            designation: "",
-            team: "",
             emp_user_id : "",
             allEmployees: [],
         };
@@ -60,7 +58,7 @@ var UpdateProfile = React.createClass({
             this.state.phone, this.state.phoneType).then(function(response) {
         }.bind(this));
         Materialize.toast("Employee updated", 3000);
-        this.clearForm();
+        // this.clearForm();
         this.getEmployees();       
    },
     clearForm: function() {
@@ -75,7 +73,7 @@ var UpdateProfile = React.createClass({
     },
 
     clearStates: function() {
-        this.setState({ firstName: "", lastName: "", addressOne: "", addressTwo: "", city: "", state: "", zip: "", email: "", phone: "", phoneType: "",designation: "",team: "", selectedEmployee: ""});
+        // this.setState({ firstName: "", lastName: "", addressOne: "", addressTwo: "", city: "", state: "", zip: "", email: "", phone: "", phoneType: "",designation: "",team: "", selectedEmployee: ""});
     },
 
     activeButtons: function() {
